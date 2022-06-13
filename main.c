@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+
 char **copy_envp(char **envp)
 {
 	char **res;
@@ -43,7 +44,7 @@ int boucle(int argc, char **argv, char **envp2)
 	if (str_n_cmp(tab[0], "echo", 5) == 0)
 	{
 		printf ("cmd echo\n");
-		cmd_echo(tab);
+		cmd_echo(envp2, tab);
 	}
 	else if (str_n_cmp(tab[0], "cd", 3) == 0)
 	{
@@ -76,10 +77,10 @@ int boucle(int argc, char **argv, char **envp2)
 		cmd_exit(tab);
 	}
 	else
-{
-			printf ("cmd \n");
+	{
+		printf ("cmd \n");
 		command(tab, envp2);
-}
+	}
 	boucle(argc, argv, envp2);
 	return 0;
 }

@@ -83,9 +83,10 @@ int cmd_pwd()
 	return (value);
 }
 
-int cmd_echo(char **tab)
+int cmd_echo(char **envp2, char **tab)
 {
 	int i = 1;
+	char *res;
 
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
 	{
@@ -95,6 +96,11 @@ int cmd_echo(char **tab)
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
+
+	/* en cas de variables $
+	res = find_var(envp2, "TERM");
+	printf("res = %s\n", res);*/
+
 	while (tab[i])
 	{
 		write(1, tab[i], str_len(tab[i]));

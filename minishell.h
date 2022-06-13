@@ -44,12 +44,15 @@ char **modify_paths(char **paths);
 char *find_right_path(char **paths, char *cmd);
 char *find_path(char **envp, char *cmd);
 
+//-----var-----
+char *find_var(char **envp, char *var);
+
 //-----cmd-----
 void cmd_exit();
 int cmd_env(char **envp2, char **tab);
 int cmd_cd(char **tab);
 int cmd_pwd();
-int cmd_echo(char **tab);
+int cmd_echo(char **envp2, char **tab);
 
 //-----export_unset-----
 char *exist_var(char **envp2, char *var);

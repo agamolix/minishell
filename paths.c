@@ -19,13 +19,14 @@ int command(char **tab, char **envp)
 	pid = fork();
 	if (pid == -1) //echec fork
 	{
-		perror("Erreur fork");
-		exit(EXIT_FAILURE);
+		perror("Fork error");
+		value = 1;
+		exit(value);
 	}
 	else if (pid == 0) //processus fils
 	{
 		if (execve(find_path(envp, tab[0]), tab, NULL) == -1)
-			perror("Execve");
+			perror("Execve error");
 	}
 	else //processus père
 	{
@@ -44,10 +45,13 @@ char **find_paths(char **envp)
 	while(envp[i])
 	{
 		if (str_n_cmp(envp[i], "PATH", 4) == 0)
+		{
 			paths = my_split(envp[i], ':');
+			return (paths);
+		}
 		i++;
 	}
-	return (paths);
+	return (0);
 }
 
 char **modify_paths(char **paths)
@@ -100,7 +104,17 @@ char *find_path(char **envp, char *cmd)
 	char *path;
 
 	paths = find_paths(&envp[0]);
+	if (paths == 0)
+	{
+		value = 127;
+		return (0);
+	}
 	modify_paths(&paths[0]);
 	path = find_right_path(&paths[0], cmd);
+	if (path == 0)
+	{
+		value = 126;
+		return (0);
+	}
 	return (path);
 }

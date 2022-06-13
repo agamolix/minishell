@@ -21,6 +21,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+int value;
 
 
 //-----functions-----
@@ -57,6 +58,10 @@ char **cmd_unset(char **envp2, char **tab);
 char **add_var(char **envp2, char *var);
 char **cmd_export(char **envp2, char **tab);
 
+//-----atoi-----
+int maybe_unsigned_long_long(char *str);
+int is_unsigned_long_long(char *str);
+long long int convert_long_long(char *str);
 
 
 

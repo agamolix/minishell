@@ -14,10 +14,19 @@
 
 void cmd_exit(char **tab)
 {
-	
-	//verifier les erreurs et les codes de retour
-//	exit(tab[1]);
-
+	if (maybe_unsigned_long_long(tab[1]) == 0 || is_unsigned_long_long(tab[1]) == 0)
+	{
+		printf("bash: exit: %s: numeric argument necessary\n", tab[1]);
+		exit(2);
+	}
+	if (tab[2])
+	{
+		printf("bash: exit: too many arguments\n");
+		exit(1);
+	}
+	value = convert_long_long(tab[1]) % 256;
+	printf("exit\n");
+	exit(value);
 }
 
 int cmd_env(char **envp2, char **tab)
@@ -26,29 +35,35 @@ int cmd_env(char **envp2, char **tab)
 
 	if (tab[1])
 	{
-		printf ("Too many arguments\n");
-		return (1);
+		printf ("bash: too many arguments\n");
+		value = 1;
+		return (value);
 	}
 	while (envp2[i])
 	{
 		printf("%s\n", envp2[i]);
 		i++;
 	}
-	return 0;
+	value = 0;
+	return (value);
 }
 
 int cmd_cd(char **tab)
 {
 	if (tab[2])
 	{
-		printf ("Too many arguments\n");
-		return (1);
+		printf ("bash: too many arguments\n");
+		value = 1;
+		return (value);
 	}
 	if (chdir(tab[1]))
 	{
-		perror("Erreur cd");
+		perror("Error cd");
+		value = 1;
+		return (value);
 	}
-	return 0;
+	value = 0;
+	return (value);
 }
 
 int cmd_pwd()
@@ -59,17 +74,25 @@ int cmd_pwd()
 	if (buf == 0)
 	{
 		perror("Erreur pwd");
+		value = 1;
+		return (value);
 	}
 	printf("%s\n", getcwd(buf, 1000));
 	free(buf);
-
-	return 0;
+	value = 0;
+	return (value);
 }
 
 int cmd_echo(char **tab)
 {
 	int i = 1;
 
+	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
+	{
+		printf("%d\n", value);
+		value = 0;
+		return (value);
+	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
 	while (tab[i])
@@ -81,5 +104,6 @@ int cmd_echo(char **tab)
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3))
 		write(1, "\n", 1);
-	return 0;
+	value = 0;
+	return (value);
 }

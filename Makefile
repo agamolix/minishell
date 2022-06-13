@@ -20,7 +20,7 @@ SRC_DIR	= src/
 
 ######## SOURCE FILES ##########################################################
 
-SRC_FILES =		main		functions 	paths  export_unset  cmd\
+SRC_FILES =		main		functions 	paths  export_unset  cmd atoi\
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addsuffix .o, $(SRC_FILES))

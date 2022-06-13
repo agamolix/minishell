@@ -76,8 +76,10 @@ int boucle(int argc, char **argv, char **envp2)
 		cmd_exit(tab);
 	}
 	else
+{
+			printf ("cmd \n");
 		command(tab, envp2);
-
+}
 	boucle(argc, argv, envp2);
 	return 0;
 }
@@ -86,6 +88,7 @@ int main(int argc, char **argv, char **envp)
 {
 	char **envp2;
 
+	value = 0;
 	envp2 = copy_envp(envp);
 	boucle(argc, argv, envp2);
 	return 0;

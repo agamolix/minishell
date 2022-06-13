@@ -1,0 +1,202 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   functions.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
+/*   Updated: 2022/02/08 16:14:27 by atrilles         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdlib.h>
+#include "minishell.h"
+
+int str_len(char *str)
+{
+    int len;
+
+    len = 0;
+    while (str[len])
+        len++;
+    return len;
+}
+
+char    *line(char *str, char c)
+{
+    char *temp;
+    int len; 
+    int i; 
+
+    len = 0;
+    while (str[len] && str[len] != c)
+        len++;
+    temp = malloc((len + 1) * sizeof(char));
+    i = 0;
+    while (i < len)
+    {
+        temp[i] = str[i];
+        i++;
+    }
+    temp[i] = 0;
+    return (temp);
+}
+
+char    *forward(char *str, char c)
+{
+    while (str[0] && str[0] == c)
+        str++;
+    return ((char *)str);
+}
+
+int     count(char *str, char c)
+{
+    char *temp;
+    char *freetemp;
+    int i;
+
+    i = 0;    
+    temp = malloc((str_len(str) + 1) * sizeof(char));
+    freetemp = temp;
+    temp = forward(str, c);
+
+    while (temp[0])
+    {
+        i++;
+        temp = temp + str_len(line(temp, c));
+        temp = forward(temp, c);
+    }   
+    free (freetemp);
+    return i;
+}
+
+char	**my_split(char *s, char c)
+{
+    char	**res;
+    int i; 
+    char *temp;
+    
+    res = malloc((count(s, c) + 1) * sizeof(char *));
+    i = 0;
+    temp = malloc((str_len(s) + 1) * sizeof(char));
+    temp = forward(s, c);
+
+    while (temp[0])
+    {
+        res[i] = malloc((str_len(line(temp, c)) + 1) * sizeof(char));
+        res[i] = line(temp, c);
+        temp = temp + str_len(res[i]);
+        temp = forward(temp, c);
+        i++;
+    }
+    res[i] = 0;
+    return res;
+}
+
+int str_n_cmp(char *s1, char *s2, size_t n)
+{
+	size_t	i;
+	int		res;
+
+	i = 0;
+	res = 0;
+	while (i < n)
+	{
+		res = s1[i] - s2[i];
+		if (res != 0)
+			return (res);
+		if (s1[i] == 0 || s2[i] == 0)
+			return (0);
+		i++;
+	}
+	return (res);
+}
+
+char    *emptystr()
+{
+    char    *res;
+
+    res = malloc(sizeof(char));
+    res[0] = 0;
+    return res;
+}
+
+char	*sub_str(char *s, unsigned int start, size_t len)
+{
+    char    *res;
+    int i;
+
+    i = 0;
+    if (s == 0)
+        return (0);
+    if ((int)start > str_len((char *)s))
+        return (emptystr());
+    if (len > str_len((char *)s) - start)
+        res = malloc((str_len((char *)s) - start + 1) * sizeof(char));
+    else
+        res = malloc((len + 1) * sizeof(char));
+    if (res == 0)
+        return 0;
+    while (s[start + i] && i < (int)len)
+    {
+        res[i] = s[start + i];
+        i++;
+    }
+    res[i] = 0;
+    return (res);
+}
+
+char	*str_join(char *s1, char *s2)
+{
+	char		*res;
+	int			i;
+	int			j;
+	const char	*s = "";
+
+	if (s1 == 0)
+		s1 = (char *)s;
+	res = malloc((str_len(s1) + str_len(s2) + 1) * sizeof(char));
+	if (res == 0)
+		return (0);
+	i = -1;
+	while (s1[++i])
+		res[i] = s1[i];
+	j = -1;
+	while (s2[++j])
+		res[i + j] = s2[j];
+	res[i + j] = 0;
+	return (res);
+}
+
+char	*str_dup(char *src)
+{
+	int		size;
+	char	*s2;
+	int		i;
+
+	size = str_len(src) + 1;
+	s2 = malloc (size * sizeof(char));
+	if (s2 == 0)
+		return (0);
+	i = 0;
+	while (src[i])
+	{
+		s2[i] = src[i];
+		i++;
+	}
+	s2[i] = 0;
+	return (s2);
+}
+
+char *str_chr(char *s, int c)
+{
+    if (s == 0)
+        return (0);
+    while (s[0] && s[0] != (char)c)
+        s++;
+    if (s[0] == (char)c)
+        return ((char *)s);
+    return (0);
+}
+

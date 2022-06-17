@@ -56,6 +56,11 @@ int cmd_cd(char **tab)
 		value = 1;
 		return (value);
 	}
+	if (tab[1] == 0)
+	{
+		value = 0;
+		return (value);
+	}
 	if (chdir(tab[1]))
 	{
 		perror("Error cd");
@@ -96,10 +101,6 @@ int cmd_echo(char **envp2, char **tab)
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
-
-	/* en cas de variables $
-	res = find_var(envp2, "TERM");
-	printf("res = %s\n", res);*/
 
 	while (tab[i])
 	{

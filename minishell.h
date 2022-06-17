@@ -21,6 +21,19 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
+typedef struct s_command
+{
+	char *file_in;
+	int fd_in;
+	char *file_out;
+	int fd_out;
+	char *options;
+}	t_command;
+
+
+
+
 int value;
 
 
@@ -34,11 +47,13 @@ int str_n_cmp(char *s1, char *s2, size_t n);
 char    *emptystr();
 char	*sub_str(char *s, unsigned int start, size_t len);
 char	*str_join(char *s1, char *s2);
+char	*str_n_dup_start(char *src, int nb, int start);
+char	*str_n_dup(char *src, int nb);
 char	*str_dup(char *src);
 char *str_chr(char *s, int c);
 
 //-----paths-----
-int command(char **tab, char **envp);
+int do_command(char **tab, char **envp);
 char **find_paths(char **envp);
 char **modify_paths(char **paths);
 char *find_right_path(char **paths, char *cmd);
@@ -46,6 +61,7 @@ char *find_path(char **envp, char *cmd);
 
 //-----var-----
 char *find_var(char **envp, char *var);
+char *find_free_var(char **envp, char *var);
 
 //-----cmd-----
 void cmd_exit();
@@ -65,6 +81,8 @@ char **cmd_export(char **envp2, char **tab);
 int maybe_unsigned_long_long(char *str);
 int is_unsigned_long_long(char *str);
 long long int convert_long_long(char *str);
+char *itoa(int nb);
+
 
 
 

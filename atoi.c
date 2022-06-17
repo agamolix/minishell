@@ -77,3 +77,35 @@ long long int convert_long_long(char *str)
     }
     return (res * sign);
 }
+
+char *itoa(int nb)
+{
+	int nb2;
+	int i;
+	char *res;
+
+	if (nb == 0)
+	{
+		res = malloc(sizeof(char) * 2);
+		res[0] = '0';
+		res[1] = 0;
+		return (res);
+	}
+	printf("nb = %d\n", nb);
+	nb2 = nb;
+	i = 1;
+	while(nb2 / 10 > 0)
+		i++;
+	res = malloc(sizeof(char) * (i + 1));
+	res[i] = 0;
+	i--;
+	while(nb > 0)
+	{
+		res[i] = (nb % 10) + '0';
+	printf("res i = %c\n", res[i]);
+		nb = nb / 10; 
+		i--;
+	}	
+	printf("itoa = %s\n", res);
+	return(res);
+}

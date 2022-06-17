@@ -23,75 +23,66 @@ int str_len(char *str)
     return len;
 }
 
-char    *line(char *str, char c)
+char	*line(char *str, char c)
 {
-    char *temp;
-    int len; 
-    int i; 
+	char	*temp;
+	int		len;
+	int		i;
 
-    len = 0;
-    while (str[len] && str[len] != c)
-        len++;
-    temp = malloc((len + 1) * sizeof(char));
-    i = 0;
-    while (i < len)
-    {
-        temp[i] = str[i];
-        i++;
-    }
-    temp[i] = 0;
-    return (temp);
+	len = 0;
+	while (str[len] && str[len] != c)
+		len++;
+	temp = malloc((len + 1) * sizeof(char));
+	i = 0;
+	while (i < len)
+	{
+		temp[i] = str[i];
+		i++;
+	}
+	temp[i] = 0;
+	return (temp);
 }
 
-char    *forward(char *str, char c)
+char	*forward(char *str, char c)
 {
-    while (str[0] && str[0] == c)
-        str++;
-    return ((char *)str);
+	while (str[0] && str[0] == c)
+		str++;
+	return (str);
 }
 
-int     count(char *str, char c)
+int	count(char *str, char c)
 {
-    char *temp;
-    char *freetemp;
-    int i;
+	int		i;
 
-    i = 0;    
-    temp = malloc((str_len(str) + 1) * sizeof(char));
-    freetemp = temp;
-    temp = forward(str, c);
-
-    while (temp[0])
-    {
-        i++;
-        temp = temp + str_len(line(temp, c));
-        temp = forward(temp, c);
-    }   
-    free (freetemp);
-    return i;
+	i = 0;
+	str = forward(str, c);
+	while (str[0])
+	{
+		i++;
+		while (str[0] && str[0] != c)
+			str++;
+		str = forward(str, c);
+	}
+	return (i);
 }
 
 char	**my_split(char *s, char c)
 {
-    char	**res;
-    int i; 
-    char *temp;
-    
-    res = malloc((count(s, c) + 1) * sizeof(char *));
-    i = 0;
-    temp = malloc((str_len(s) + 1) * sizeof(char));
-    temp = forward(s, c);
+	char	**res;
+	int		i;
 
-    while (temp[0])
-    {
-        res[i] = malloc((str_len(line(temp, c)) + 1) * sizeof(char));
-        res[i] = line(temp, c);
-        temp = temp + str_len(res[i]);
-        temp = forward(temp, c);
-        i++;
-    }
-    res[i] = 0;
-    return res;
+	res = malloc((count(s, c) + 1) * sizeof(char *));
+	i = 0;
+	s = forward(s, c);
+	while (s[0])
+	{
+		res[i] = line(s, c);
+		s = s + str_len(res[i]);
+		s = forward(s, c);
+		i++;
+	}
+	res[i] = 0;
+	return (res);
 }
 
 int str_n_cmp(char *s1, char *s2, size_t n)
@@ -183,6 +174,46 @@ char	*str_dup(char *src)
 	while (src[i])
 	{
 		s2[i] = src[i];
+		i++;
+	}
+	s2[i] = 0;
+	return (s2);
+}
+
+char	*str_n_dup(char *src, int nb)
+{
+	int		size;
+	char	*s2;
+	int		i;
+
+	size = nb + 1;
+	s2 = malloc (size * sizeof(char));
+	if (s2 == 0)
+		return (0);
+	i = 0;
+	while (src[i] && i < nb)
+	{
+		s2[i] = src[i];
+		i++;
+	}
+	s2[i] = 0;
+	return (s2);
+}
+
+char	*str_n_dup_start(char *src, int nb, int start)
+{
+	int		size;
+	char	*s2;
+	int		i;
+
+	size = nb + 1;
+	s2 = malloc (size * sizeof(char));
+	if (s2 == 0)
+		return (0);
+	i = 0;
+	while (src[i + start] && i < nb)
+	{
+		s2[i] = src[i + start];
 		i++;
 	}
 	s2[i] = 0;

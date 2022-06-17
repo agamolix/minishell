@@ -12,9 +12,10 @@
 
 #include "minishell.h"
 
-int command(char **tab, char **envp)
+int do_command(char **tab, char **envp)
 {
 	pid_t pid;
+	int status;
 
 	pid = fork();
 	if (pid == -1) //echec fork
@@ -25,12 +26,13 @@ int command(char **tab, char **envp)
 	}
 	else if (pid == 0) //processus fils
 	{
-		if (execve(find_path(envp, tab[0]), tab, NULL) == -1)
-			perror("Execve error");
+		execve(find_path(envp, tab[0]), tab, NULL);
 	}
 	else //processus père
 	{
-		wait(NULL);
+		wait(&status);
+		value = WEXITSTATUS(status);
+		printf("end do_command: value = %d\n", value);
 		kill(pid, SIGTERM);
 	}
 	return 0;
@@ -106,6 +108,7 @@ char *find_path(char **envp, char *cmd)
 	paths = find_paths(&envp[0]);
 	if (paths == 0)
 	{
+		printf("find paths error\n");
 		value = 127;
 		return (0);
 	}
@@ -113,6 +116,7 @@ char *find_path(char **envp, char *cmd)
 	path = find_right_path(&paths[0], cmd);
 	if (path == 0)
 	{
+		printf("find paths error\n");
 		value = 126;
 		return (0);
 	}

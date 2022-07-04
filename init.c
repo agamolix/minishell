@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   var.c                                              :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,28 +12,29 @@
 
 #include "minishell.h"
 
-char *find_free_var(t_env *env, char *var)
+int init(t_command *command)
 {
-	char *res;
-	int i;
-
-	i = 0;
-	while(env->env[i])
-	{
-		if (str_n_cmp(env->env[i], var, str_len(var)) == 0 && env->env[i][str_len(var)] == '=')
-		{
-			res = env->env[i];
-			while(res[0] != '=')
-				res++;
-			res++;
-			return (res);
-		}
-		i++;
-	}
-	if (var[0] == '?')
-		return(itoa(env->value));
-	free(var);
-	return (0);
+	command->options = 0;
+	command->fd_file_in = 0;
+	command->file_in = 0;
+	command->fd_file_out = 0;
+	command->file_out = 0;
+	command->pipe_flag_in = 0;
+	command->pipe_flag_out = 0;
+	command->fd_pipe_in = 0;
+	command->fd_pipe_in_next = 0;
+	command->fd_pipe_out = 0;
+	command->fd_in = 0;
+	command->fd_out = 1;
+	return 0;
 }
 
-
+int init_cmd(t_command *command)
+{
+	command->options = 0;
+	command->fd_file_in = 0;
+	command->file_in = 0;
+	command->fd_file_out = 0;
+	command->file_out = 0;
+	return 0;
+}

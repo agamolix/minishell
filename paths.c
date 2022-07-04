@@ -11,44 +11,20 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <fcntl.h>
 
-int do_command(char **tab, char **envp)
-{
-	pid_t pid;
-	int status;
 
-	pid = fork();
-	if (pid == -1) //echec fork
-	{
-		perror("Fork error");
-		value = 1;
-		exit(value);
-	}
-	else if (pid == 0) //processus fils
-	{
-		execve(find_path(envp, tab[0]), tab, NULL);
-	}
-	else //processus père
-	{
-		wait(&status);
-		value = WEXITSTATUS(status);
-		printf("end do_command: value = %d\n", value);
-		kill(pid, SIGTERM);
-	}
-	return 0;
-}
-
-char **find_paths(char **envp)
+char **find_paths(t_env *env)
 {
 	char **paths;
 	int i;
 
 	i = 0;
-	while(envp[i])
+	while(env->env[i])
 	{
-		if (str_n_cmp(envp[i], "PATH", 4) == 0)
+		if (str_n_cmp(env->env[i], "PATH", 4) == 0)
 		{
-			paths = my_split(envp[i], ':');
+			paths = my_split(env->env[i], ':');
 			return (paths);
 		}
 		i++;
@@ -100,24 +76,26 @@ char *find_right_path(char **paths, char *cmd)
 	return (0);
 }
 
-char *find_path(char **envp, char *cmd)
+char *find_path(t_env *env, char *cmd)
 {
 	char **paths;
 	char *path;
 
-	paths = find_paths(&envp[0]);
+	paths = find_paths(env);
 	if (paths == 0)
 	{
-		printf("find paths error\n");
-		value = 127;
+		perror("Path error");
+		env->value = 127;
+		env->stop = 1;
 		return (0);
 	}
 	modify_paths(&paths[0]);
 	path = find_right_path(&paths[0], cmd);
 	if (path == 0)
 	{
-		printf("find paths error\n");
-		value = 126;
+		perror("Path error");
+		env->value = 126;
+		env->stop = 1;
 		return (0);
 	}
 	return (path);

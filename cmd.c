@@ -12,66 +12,69 @@
 
 #include "minishell.h"
 
-void cmd_exit(char **tab)
+void cmd_exit(char **tab, t_env *env)
 {
 	if (maybe_unsigned_long_long(tab[1]) == 0 || is_unsigned_long_long(tab[1]) == 0)
 	{
-		printf("bash: exit: %s: numeric argument necessary\n", tab[1]);
+		printf("Exit error: %s: numeric argument necessary\n", tab[1]);
 		exit(2);
 	}
 	if (tab[2])
 	{
-		printf("bash: exit: too many arguments\n");
+		printf("Exit error: too many arguments\n");
 		exit(1);
 	}
-	value = convert_long_long(tab[1]) % 256;
+	env->value = convert_long_long(tab[1]) % 256;
 	printf("exit\n");
-	exit(value);
+	exit(env->value);
 }
 
-int cmd_env(char **envp2, char **tab)
+int cmd_cd(char **tab, t_env *env)
+{
+	if (tab[2])
+	{
+		printf ("Error cd: too many arguments\n");
+		env->value = 1;
+		env->stop = 1;
+		return (env->value);
+	}
+	if (tab[1] == 0)
+	{
+		env->value = 0;
+		env->stop = 1;
+		return (env->value);
+	}
+	if (chdir(tab[1]))
+	{
+		perror("Error cd");
+		env->value = 1;
+		env->stop = 1;
+		return (env->value);
+	}
+	env->value = 0;
+	return (env->value);
+}
+
+void cmd_env(t_env *env, char **tab)
 {
 	int i = 0;
 
 	if (tab[1])
 	{
-		printf ("bash: too many arguments\n");
-		value = 1;
-		return (value);
+		printf("Error env: too many arguments\n");
+		env->value = 1;
+		env->stop = 1;
+		return;
 	}
-	while (envp2[i])
+	while (env->env[i])
 	{
-		printf("%s\n", envp2[i]);
+	    printf("%s\n", env->env[i]);
 		i++;
 	}
-	value = 0;
-	return (value);
+	env->value = 0;
 }
 
-int cmd_cd(char **tab)
-{
-	if (tab[2])
-	{
-		printf ("bash: too many arguments\n");
-		value = 1;
-		return (value);
-	}
-	if (tab[1] == 0)
-	{
-		value = 0;
-		return (value);
-	}
-	if (chdir(tab[1]))
-	{
-		perror("Error cd");
-		value = 1;
-		return (value);
-	}
-	value = 0;
-	return (value);
-}
-
-int cmd_pwd()
+void cmd_pwd(t_env *env)
 {
 	char *buf;
 
@@ -79,25 +82,24 @@ int cmd_pwd()
 	if (buf == 0)
 	{
 		perror("Erreur pwd");
-		value = 1;
-		return (value);
+		env->value = 1;
+		env->stop = 1;
+		return;
 	}
-	printf("%s\n", getcwd(buf, 1000));
+	write(1, getcwd(buf, 1000), str_len(getcwd(buf, 1000)));
+	write(1, "\n", 1);
 	free(buf);
-	value = 0;
-	return (value);
+	env->value = 0;
 }
 
-int cmd_echo(char **envp2, char **tab)
+void cmd_echo(char **tab, t_env *env)
 {
 	int i = 1;
-	char *res;
 
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
 	{
-		printf("%d\n", value);
-		value = 0;
-		return (value);
+		put_nbr_fd(env->value, 1);
+		write(1, "\n", 1);
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
@@ -105,12 +107,9 @@ int cmd_echo(char **envp2, char **tab)
 	while (tab[i])
 	{
 		write(1, tab[i], str_len(tab[i]));
-		if (tab[i + 1])
-			write(1, " ", 1);
 		i++;
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3))
 		write(1, "\n", 1);
-	value = 0;
-	return (value);
+	env->value = 0;
 }

@@ -85,27 +85,22 @@ char *itoa(int nb)
 	char *res;
 
 	if (nb == 0)
-	{
-		res = malloc(sizeof(char) * 2);
-		res[0] = '0';
-		res[1] = 0;
-		return (res);
-	}
-	printf("nb = %d\n", nb);
+		return(str_dup("0"));
 	nb2 = nb;
 	i = 1;
 	while(nb2 / 10 > 0)
+	{
 		i++;
+		nb2 = nb2 / 10;
+	}
 	res = malloc(sizeof(char) * (i + 1));
 	res[i] = 0;
 	i--;
 	while(nb > 0)
 	{
 		res[i] = (nb % 10) + '0';
-	printf("res i = %c\n", res[i]);
 		nb = nb / 10; 
 		i--;
 	}	
-	printf("itoa = %s\n", res);
 	return(res);
 }

@@ -21,6 +21,7 @@ SRC_DIR	= src/
 ######## SOURCE FILES ##########################################################
 
 SRC_FILES =		main		functions 	paths  export_unset  cmd atoi  var\
+				init		case_parse	do_command
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addsuffix .o, $(SRC_FILES))
@@ -36,12 +37,12 @@ LDFLAGS =
 all: $(NAME)
 
 $(NAME): $(OBJ)
-#	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
-	$(CC) $(OBJ) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
+#	$(CC) $(OBJ) -o $(NAME) -lreadline
 
 %.o: %.c
-#	$(CC) $(CFLAGS) -lreadline -c $< -o $@
-	$(CC) -lreadline -c $< -o $@
+	$(CC) $(CFLAGS) -lreadline -c $< -o $@
+#	$(CC) -lreadline -c $< -o $@
 
 .PHONY: clean fclean re
 

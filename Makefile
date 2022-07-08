@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: atrilles <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/02/16 18:17:53 by atrilles         ###   ########.fr        #
+#    Updated: 2022/07/08 21:48:24 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,12 +37,12 @@ LDFLAGS =
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
-#	$(CC) $(OBJ) -o $(NAME) -lreadline
+	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
+	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline
 
 %.o: %.c
-	$(CC) $(CFLAGS) -lreadline -c $< -o $@
-#	$(CC) -lreadline -c $< -o $@
+	# $(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -ggdb3 -lreadline -c $< -o $@
 
 .PHONY: clean fclean re
 

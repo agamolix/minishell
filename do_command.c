@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   do_command.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <atrilles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/04/22 17:41:03 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/07/08 21:54:20 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 int do_command(char **tab, t_env *env, t_command *command)
 {
 	pid_t pid;
@@ -76,6 +75,7 @@ int do_command(char **tab, t_env *env, t_command *command)
 //			printf("options = %s\n", command->options);
 			if (path == 0)
 				exit(EXIT_FAILURE);
+			printf("path: %s\n", path);
 			execve(path, tab, NULL);
 		}
 	}

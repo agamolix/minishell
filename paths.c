@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/02/08 16:14:27 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/07/08 22:34:45 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,50 @@ char *find_right_path(char **paths, char *cmd)
 	return (0);
 }
 
+int arr_len(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}
+int relative_path(char *cmd)
+{
+	char	buf[1000];
+	int		i;
+	char	**absolute_path;
+	char	**folders_in_path;
+	int		current_folder_index;
+
+
+	i = 0;
+	getcwd(buf, 1000);
+	printf("i%s\n;", buf);
+	absolute_path = my_split(buf, "/");
+	folders_in_path = my_split(cmd, "/");
+	current_folder_index = arr_len(absolute_path) - 1;
+	while (folders_in_path[i])
+	{
+		if (str_n_cmp(folders_in_path[i], "..", 3) == 0)
+		{
+			current_folder_index--;
+		}
+		else if (str_n_cmp(folders_in_path[i], ".", 2) != 0)
+		{
+			
+		}
+
+		i++;
+	}
+	
+}
 char *find_path(t_env *env, char *cmd)
 {
 	char **paths;
 	char *path;
-
+	relative_path(cmd);
 	paths = find_paths(env);
 	if (paths == 0)
 	{

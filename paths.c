@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/13 00:00:06 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 00:25:38 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,30 +96,22 @@ char	*relative_path(char *cmd)
 
 	i = 0;
 	getcwd(buf, 1000);
-	printf("i%s\n;", buf);
 	absolute_path = my_split(buf, '/');
 	folders_in_path = my_split(cmd, '/');
 	current_folder_index = arr_len(absolute_path) - 1;
-	// ft_print_str_arr(absolute_path);
 	absolute_path = double_pointer_realloc(absolute_path, arr_len(absolute_path) + arr_len(folders_in_path));
-	// ft_print_str_arr(absolute_path);
 	while (folders_in_path[i])
 	{
 		if (str_n_cmp(folders_in_path[i], "..", 3) == 0)
-		{
-			printf("back %s", folders_in_path[i]);
 			current_folder_index--;
-		}
 		else if (str_n_cmp(folders_in_path[i], ".", 2) != 0)
 		{
 			absolute_path[current_folder_index + 1] = folders_in_path[i];
-			printf("new %s", folders_in_path[i]);
 			current_folder_index++;
 		}
 		i++;
 	}
 	absolute_path[current_folder_index + 1] = 0;
-	// ft_print_str_arr(absolute_path);
 	printf("\n%s\n", ft_join_arr_by_str(absolute_path, "/"));
 	if (access(ft_join_arr_by_str(absolute_path, "/"), F_OK || X_OK) == 0)
 		return (ft_join_arr_by_str(absolute_path, "/"));

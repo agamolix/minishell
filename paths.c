@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/13 00:25:38 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 00:26:47 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char	*relative_path(char *cmd)
 		i++;
 	}
 	absolute_path[current_folder_index + 1] = 0;
-	printf("\n%s\n", ft_join_arr_by_str(absolute_path, "/"));
+	printf("\nAbsolute path: %s\n", ft_join_arr_by_str(absolute_path, "/"));
 	if (access(ft_join_arr_by_str(absolute_path, "/"), F_OK || X_OK) == 0)
 		return (ft_join_arr_by_str(absolute_path, "/"));
 	return (0);

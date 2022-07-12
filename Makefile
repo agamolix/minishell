@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/07/08 21:48:24 by gmillon          ###   ########.fr        #
+#    Updated: 2022/07/12 23:23:30 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ NAME = minishell
 ######## DIRECTORIES ###########################################################
 
 SRC_DIR	= src/
+LIBFTDIR = ./libftextended
+LIBFTINCLUDES = $(LIBFTDIR)/headers
 
 ######## SOURCE FILES ##########################################################
 
@@ -36,14 +38,16 @@ LDFLAGS =
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(LIBFTDIR)/libft.a
 	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
-	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline
+	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline $(LIBFTDIR)/libft.a
 
 %.o: %.c
 	# $(CC) $(CFLAGS) -c $< -o $@
-	$(CC) -ggdb3 -lreadline -c $< -o $@
+	$(CC) -ggdb3 -lreadline -c -I$(LIBFTINCLUDES) $< -o $@ 
 
+$(LIBFTDIR)/libft.a:
+	$(MAKE) -C $(LIBFTDIR)
 .PHONY: clean fclean re
 
 clean: 
@@ -51,5 +55,5 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-
+	rm -f $(LIBFTDIR)/libft.a
 re:	fclean all

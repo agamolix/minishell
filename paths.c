@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/08 22:34:45 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 00:00:06 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int arr_len(char **arr)
 		i++;
 	return (i);
 }
-int relative_path(char *cmd)
+
+char	*relative_path(char *cmd)
 {
 	char	buf[1000];
 	int		i;
@@ -93,34 +94,57 @@ int relative_path(char *cmd)
 	char	**folders_in_path;
 	int		current_folder_index;
 
-
 	i = 0;
 	getcwd(buf, 1000);
 	printf("i%s\n;", buf);
-	absolute_path = my_split(buf, "/");
-	folders_in_path = my_split(cmd, "/");
+	absolute_path = my_split(buf, '/');
+	folders_in_path = my_split(cmd, '/');
 	current_folder_index = arr_len(absolute_path) - 1;
+	// ft_print_str_arr(absolute_path);
+	absolute_path = double_pointer_realloc(absolute_path, arr_len(absolute_path) + arr_len(folders_in_path));
+	// ft_print_str_arr(absolute_path);
 	while (folders_in_path[i])
 	{
 		if (str_n_cmp(folders_in_path[i], "..", 3) == 0)
 		{
+			printf("back %s", folders_in_path[i]);
 			current_folder_index--;
 		}
 		else if (str_n_cmp(folders_in_path[i], ".", 2) != 0)
 		{
-			
+			absolute_path[current_folder_index + 1] = folders_in_path[i];
+			printf("new %s", folders_in_path[i]);
+			current_folder_index++;
 		}
-
 		i++;
 	}
-	
+	absolute_path[current_folder_index + 1] = 0;
+	// ft_print_str_arr(absolute_path);
+	printf("\n%s\n", ft_join_arr_by_str(absolute_path, "/"));
+	if (access(ft_join_arr_by_str(absolute_path, "/"), F_OK || X_OK) == 0)
+		return (ft_join_arr_by_str(absolute_path, "/"));
+	return (0);
+}
+
+char *validate_path(char *relative_path, char *env_path, t_env *env)
+{
+	if (env_path)
+		return (env_path);
+	if (relative_path)
+		return (relative_path);
+	perror("Path error");
+	env->value = 126;
+	env->stop = 1;
+	return (0);	
 }
 char *find_path(t_env *env, char *cmd)
 {
-	char **paths;
-	char *path;
-	relative_path(cmd);
+	char	**paths;
+	char	*env_path;
+	char	*rel_path;
+	
 	paths = find_paths(env);
+	rel_path = relative_path(cmd);
 	if (paths == 0)
 	{
 		perror("Path error");
@@ -129,13 +153,13 @@ char *find_path(t_env *env, char *cmd)
 		return (0);
 	}
 	modify_paths(&paths[0]);
-	path = find_right_path(&paths[0], cmd);
-	if (path == 0)
-	{
-		perror("Path error");
-		env->value = 126;
-		env->stop = 1;
-		return (0);
-	}
-	return (path);
+	env_path = find_right_path(&paths[0], cmd);
+	// if (path == 0)
+	// {
+	// 	perror("Path error");
+	// 	env->value = 126;
+	// 	env->stop = 1;
+	// 	return (0);
+	// }
+	return (validate_path(rel_path, env_path, env));
 }

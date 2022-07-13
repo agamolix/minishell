@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   case_parse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/02/08 16:14:27 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/07/13 02:08:01 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 
 char *forward_space(char *input)
 {
-	while(input[0] == ' ')
+	while(input[0] == ' ' || input[0] == '\t')
+	{
 		input++;
+	}
+	// printf("%s\n", input);
 	return (input);
 }
 

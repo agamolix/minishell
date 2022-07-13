@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/12 22:49:41 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 01:49:59 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/wait.h>
+#include <signal.h>
 # include "libft.h"
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-
 typedef struct s_command
 {
 	char *file_in;
@@ -47,7 +46,13 @@ typedef struct s_env
 	int stop;
 } t_env;
 
-
+typedef struct parse_vars
+{
+	int 		argc; 
+	char		**argv;
+	t_env		*myenv; 
+	t_command	*mycommand;
+} t_parse_vars;
 
 
 //-----functions-----

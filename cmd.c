@@ -6,16 +6,15 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/13 00:39:29 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 01:17:30 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// do we have to add env value for the first two exit cases? 
 void cmd_exit(char **tab, t_env *env)
 {
-	if (!tab)
-		printf("DFSLJK");
 	if (!tab[1]) 
 		exit(0);
 	if (maybe_unsigned_long_long(tab[1]) == 0 || is_unsigned_long_long(tab[1]) == 0)

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/13 00:57:59 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 02:38:54 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,14 @@ int execute(t_env *env, t_command *command)
 	return 0;
 }
 
+// ^D displays on ctrl-D -> needs to be fixed
 int parse(int argc, char **argv, t_env *env, t_command *command)
 {
 	char *input;
 
 	input = readline("$> ");
-	printf("%d\n", ft_strlen(input));
+	if (!input)
+		exit(0);
 	add_history(input);
 	while (input)
 	{
@@ -122,15 +124,28 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 }
 
 // Probably need to kill processes if signals are used to interrupt ongoing command
-// Ctrl-D will cause 
-void	signal_handler(void)
+void	signal_handler(int sig_num, siginfo_t *info, void *parser_vars)
 {
+	(void)sig_num;
+	t_parse_vars	*cast_vars;
 
+	cast_vars = (t_parse_vars *)parser_vars;
+
+	init(cast_vars->mycommand);
+	cast_vars->myenv->stop = 0;
+	parse(cast_vars->argc, cast_vars->argv, cast_vars->myenv, cast_vars->mycommand);
 }
+//Signal handling approach doesn't work: ignoe sigint and instead parse it in the parserfunction
 int main(int argc, char **argv, char **envp)
 {
-	t_env myenv;
-	t_command mycommand;
+	t_env				myenv;
+	t_command			mycommand;
+	struct sigaction	newaction;
+	const t_parse_vars	parser_vars = {.argc = argc, .argv = argv,
+						.myenv = &myenv, .mycommand = &mycommand};
+	
+	// newaction.sa_sigaction = &signal_handler;
+	// sigaction(SIGINT, &newaction, &parser_vars);
 
 	init(&mycommand);
 	myenv.value = 0;

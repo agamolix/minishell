@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/13 02:38:54 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/07/13 06:48:45 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,14 @@ int execute(t_env *env, t_command *command)
 }
 
 // ^D displays on ctrl-D -> needs to be fixed
+int	handle_ctrl_c(void)
+{
+	ft_printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
 int parse(int argc, char **argv, t_env *env, t_command *command)
 {
 	char *input;
@@ -124,6 +132,8 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 }
 
 // Probably need to kill processes if signals are used to interrupt ongoing command
+// I guess the best way would be to pass siginfo to a handler in the command function that forks, and kill the child 
+// PID on signal reception
 void	signal_handler(int sig_num, siginfo_t *info, void *parser_vars)
 {
 	(void)sig_num;
@@ -144,9 +154,11 @@ int main(int argc, char **argv, char **envp)
 	const t_parse_vars	parser_vars = {.argc = argc, .argv = argv,
 						.myenv = &myenv, .mycommand = &mycommand};
 	
-	// newaction.sa_sigaction = &signal_handler;
+	// newaction.sa_sigaction = &handle_ctrl_c;
+	signal(SIGINT, handle_ctrl_c);
+	// sigaction(SIGINT, &newaction, NULL);
 	// sigaction(SIGINT, &newaction, &parser_vars);
-
+	// signal(SIGINT, SIG_IGN);
 	init(&mycommand);
 	myenv.value = 0;
 	myenv.stop = 0;

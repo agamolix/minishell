@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/07/13 06:02:50 by gmillon          ###   ########.fr        #
+#    Updated: 2022/07/18 14:33:08 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,11 +40,11 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFTDIR)/libft.a
 	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
-	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline $(LIBFTDIR)/libft.a
+	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline -lncurses libreadline.a $(LIBFTDIR)/libft.a
 
 %.o: %.c
 	# $(CC) $(CFLAGS) -c $< -o $@
-	$(CC) -ggdb3 -lreadline -c -I$(LIBFTINCLUDES) $< -o $@ 
+	$(CC) -ggdb3 -c -I$(LIBFTINCLUDES) $< -o $@ -lreadline -L .brew/opt/readline/lib -I .brew/opt/readline/include 
 
 $(LIBFTDIR)/libft.a:
 	$(MAKE) -C $(LIBFTDIR)

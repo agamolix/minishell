@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <atrilles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/20 12:43:54 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/09/20 12:09:46 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ char *validate_path(char *relative_path, char *env_path, t_env *env)
 	env->stop = 1;
 	return (0);	
 }
+
 char *find_path(t_env *env, char *cmd)
 {
 	char	**paths;
@@ -136,6 +137,10 @@ char *find_path(t_env *env, char *cmd)
 	char	*rel_path;
 	
 	paths = find_paths(env);
+	// if (str_n_cmp(cmd, ".", 1) == 0)
+	// 	rel_path = relative_path(cmd);
+	// else
+	// 	rel_path = 0;
 	rel_path = relative_path(cmd);
 	if (paths == 0)
 	{

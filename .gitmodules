@@ -1,0 +1,3 @@
+[submodule "libft"]
+	path = libftextended
+	url = https://github.com/ErwannMillon/libftextended.git

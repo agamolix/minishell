@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <atrilles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/20 12:42:36 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/09/29 20:35:43 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,14 @@ int execute(t_env *env, t_command *command)
 	else if (str_n_cmp(tab[0], "unset", 6) == 0)
 		cmd_unset(env, tab);
 	else if (str_n_cmp(tab[0], "exit", 5) == 0)
+	{
+		free(command->options);
 		cmd_exit(tab, env);
+	}
 	else
 		pid = do_command(tab, env, command);
 	init_cmd(command);
+	free_split(tab);
 	return pid;
 }
 
@@ -95,12 +99,13 @@ int	handle_ctrl_c(void)
 
 int parse(int argc, char **argv, t_env *env, t_command *command)
 {
-	char *input;
-	pid_t lastpid;
-	pid_t pid;
-	int status;
+	char	*input;
+	pid_t	lastpid;
+	pid_t	pid;
+	int		status;
 
 	input = readline("$> ");
+	char *free_ptr = input;
 	if (!input)
 		exit(0);
 	add_history(input);
@@ -124,7 +129,8 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 			else
 			{
 				printf("Error pipe: stop pipe\n");
-				init(command);
+				init(command, 0);
+				free(free_ptr);
 				parse(argc, argv, env, command);	
 			}
 			command->pipe_flag_out = 0;
@@ -135,6 +141,7 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 		else
 			input = cas_char(input, command, env);
 	}
+	free(free_ptr);
 	
 //	printf("final command = <%s>\n", command->options);
 //	printf("value = %d\n", env->value);
@@ -155,7 +162,7 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 		if (pid < 0)
 			break ;
 	}
-	init(command);
+	init(command, 0);
 	env->stop = 0;
 	parse(argc, argv, env, command);	
 	return 0;
@@ -171,7 +178,7 @@ void	signal_handler(int sig_num, siginfo_t *info, void *parser_vars)
 
 	cast_vars = (t_parse_vars *)parser_vars;
 
-	init(cast_vars->mycommand);
+	init(cast_vars->mycommand, 0);
 	cast_vars->myenv->stop = 0;
 	parse(cast_vars->argc, cast_vars->argv, cast_vars->myenv, cast_vars->mycommand);
 }
@@ -186,10 +193,11 @@ int main(int argc, char **argv, char **envp)
 	
 	// newaction.sa_sigaction = &handle_ctrl_c;
 	signal(SIGINT, handle_ctrl_c);
+	// signal(SIGQUIT, )
 	// sigaction(SIGINT, &newaction, NULL);
 	// sigaction(SIGINT, &newaction, &parser_vars);
 	// signal(SIGINT, SIG_IGN);
-	init(&mycommand);
+	init(&mycommand, 1);
 	myenv.value = 0;
 	myenv.stop = 0;
 	myenv.env = copy_env(envp);

@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/02/08 16:14:27 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/09/29 20:41:18 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int init(t_command *command)
+int init(t_command *command, int first)
 {
+	ft_printf("\n");
+	if (command->options && (!first))
+		free(command->options);
 	command->options = 0;
 	command->fd_file_in = 0;
 	command->file_in = 0;
@@ -31,6 +34,8 @@ int init(t_command *command)
 
 int init_cmd(t_command *command)
 {
+	if (command->options)
+		free(command->options);
 	command->options = 0;
 	command->fd_file_in = 0;
 	command->file_in = 0;

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/13 01:17:30 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/09/20 17:07:52 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,25 @@
 void cmd_exit(char **tab, t_env *env)
 {
 	if (!tab[1]) 
+	{
+		free_split(tab);
 		exit(0);
+	}
 	if (maybe_unsigned_long_long(tab[1]) == 0 || is_unsigned_long_long(tab[1]) == 0)
 	{
+		free_split(tab);
 		printf("Exit error: %s: numeric argument necessary\n", tab[1]);
 		exit(2);
 	}
 	if (tab[2])
 	{
+		free_split(tab);
 		printf("Exit error: too many arguments\n");
 		exit(1);
 	}
 	env->value = convert_long_long(tab[1]) % 256;
 	printf("exit\n");
+	free_split(tab);
 	exit(env->value);
 }
 

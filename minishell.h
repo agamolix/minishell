@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/20 12:30:20 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/09/29 20:36:07 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-// #include <editline/readline.h>
-
 #include <sys/wait.h>
 #include <signal.h>
 # include "libft.h"
@@ -124,8 +122,11 @@ long long int convert_long_long(char *str);
 char *itoa(int nb);
 
 //-----init-----
-int init(t_command *command);
+int init(t_command *command, int first);
 int init_cmd(t_command *command);
+
+// Data Utils
+void    free_split(char **arr);
 
 //-----case_parse-----
 char *forward_space(char *input);

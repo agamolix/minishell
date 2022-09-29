@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/23 00:33:49 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/09/29 20:26:55 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,16 @@ char *cas_chevron_in(char *input, t_command *command, t_env *env)
 {
 	int i;
 
-	// printf("inputL: %s\n", input);
 	input++;
 	input = forward_space(input);
-	// printf("inputL: %c\n", input[0]);
 	i = 0;
-	while (input[i] && maybe_char(input[i]))
-		i++;
-	// while(input[i])
-	// {
-	// 	if (maybe_char(input[i]))
-	// 		i++;
-	// 	else 
-	// 		break;
-	// }
+	while(input[i])
+	{
+		if (maybe_char(input[i]))
+			i++;
+		else 
+			break;
+	}
 	command->file_in = str_n_dup(input, i);
 	if (command->fd_file_in) 
 		close(command->fd_file_in);
@@ -61,13 +57,10 @@ char *cas_chevron_in(char *input, t_command *command, t_env *env)
 		return (0);
 	}
 	command->fd_in = command->fd_file_in;
-	ft_printf("inputL:_%s\n", input);
+
 	input = input + i;
-	printf("ass%d\n", i);
 	if (str_len(input) == 0)
 		return(0);
-	// print
-	ft_printf("inputL:_%s\n", input);
 	return(input);
 }
 
@@ -78,8 +71,13 @@ char *cas_chevron_out(char *input, t_command *command, t_env *env)
 	input++;
 	input = forward_space(input);
 	i = 0;
-	while (maybe_char(input[i]))
-		i++;
+	while(input[i])
+	{
+		if (maybe_char(input[i]))
+			i++;
+		else 
+			break;
+	}
 	command->file_out = str_n_dup(input, i);
 	command->fd_file_out = open(command->file_out, O_CREAT | O_WRONLY | O_TRUNC, 0640);
 	if (command->fd_file_out == -1)
@@ -181,7 +179,7 @@ char *cas_double_quote(char *input, t_command *command, t_env *env)
 	temp = str_n_dup(input, i);
 	temp = replace_variable(temp, env);
 	temp = str_join(command->options, temp);
-	command->options = str_join(temp, " ");
+	command->options = str_join(temp, ft_strdup(" "));
 	free(temp);
 	input = input + i;
 	if (str_len(input) == 1)
@@ -213,7 +211,7 @@ char *cas_single_quote(char *input, t_command *command, t_env *env)
 	}
 	temp = str_n_dup(input, i);
 	temp = str_join(command->options, temp);
-	command->options = str_join(temp, " ");
+	command->options = str_join(temp, ft_strdup(" "));
 	free(temp);
 	input = input + i;
 	if (str_len(input) == 1)
@@ -225,6 +223,7 @@ char *cas_char(char *input, t_command *command, t_env *env)
 {
 	int i;
 	char *temp;
+	char	*dup;
 
 	i = 0;
 	while(input[i])
@@ -234,12 +233,15 @@ char *cas_char(char *input, t_command *command, t_env *env)
 		else 
 			break;
 	}
-	temp = str_n_dup(input, i);
-	temp = replace_variable(temp, env);
-	temp = str_join(command->options, temp);
-	command->options = str_join(temp, " ");
+	dup = str_n_dup(input, i);
+	dup = replace_variable(dup, env);
+	temp = str_join(command->options, dup);
+	ft_printf("command->options: %s\n", command->options);
+	command->options = str_join(temp, ft_strdup(" "));
 
-	free(temp);
+	// free(temp);
+	// free(dup);
+
 	input = input + i;
 	if (str_len(input) == 0)
 		return(0);

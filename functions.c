@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/02/08 16:14:27 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/09/29 20:26:14 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,10 @@ char	*str_join(char *s1, char *s2)
 	while (s2[++j])
 		res[i + j] = s2[j];
 	res[i + j] = 0;
+	if (s1 && *s1)
+		free(s1);
+	if (s2 && *s2)
+		free(s2);
 	return (res);
 }
 

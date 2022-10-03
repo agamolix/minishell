@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 20:45:44 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 22:14:37 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char *cas_chevron_in(char *input, t_command *command, t_env *env)
 	command->fd_in = command->fd_file_in;
 
 	input = input + i;
-	if (str_len(input) == 0)
+	if (slen(input) == 0)
 		return(0);
 	return(input);
 }
@@ -89,7 +89,7 @@ char *cas_chevron_out(char *input, t_command *command, t_env *env)
 	}
 	command->fd_out = command->fd_file_out;
 	input = input + i;
-	if (str_len(input) == 0)
+	if (slen(input) == 0)
 		return(0);
 	return(input);
 }
@@ -98,7 +98,7 @@ char *cas_pipe(char *input)
 {
 	input++;
 	input = forward_space(input);
-	if (str_len(input) == 0)
+	if (slen(input) == 0)
 		return(0);
 	return(input);
 }
@@ -111,7 +111,7 @@ char *insert_variable(char *str, int index1, int index2, char *val)
 	char *res;
 
 	part1 = str_n_dup(str, index1 - 1);
-	part2 = str_n_dup_start(str, str_len(str) - index2, index2);
+	part2 = str_n_dup_start(str, slen(str) - index2, index2);
 	if (val == 0)
 		res = str_join(part1, part2);
 	else
@@ -182,7 +182,7 @@ char *cas_double_quote(char *input, t_command *command, t_env *env)
 	command->options = str_join(temp, ft_strdup(" "));
 	free(temp);
 	input = input + i;
-	if (str_len(input) == 1)
+	if (slen(input) == 1)
 		return (0);
 	return (input + 1);
 }
@@ -214,7 +214,7 @@ char *cas_single_quote(char *input, t_command *command, t_env *env)
 	command->options = str_join(temp, ft_strdup(" "));
 	free(temp);
 	input = input + i;
-	if (str_len(input) == 1)
+	if (slen(input) == 1)
 		return (0);
 	return (input + 1);
 }
@@ -233,12 +233,8 @@ char	*cas_char(char *input, t_command *command, t_env *env)
 	temp = str_join(command->options, dup);
 	ft_printf("command->options: %s\n", command->options);
 	command->options = str_join(temp, ft_strdup(" "));
-	if (!*temp)
-		free(temp);
-	if (!*dup)
-		free(dup);
 	input = input + i;
-	if (str_len(input) == 0)
+	if (slen(input) == 0)
 		return (0);
 	return (input);
 }

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/20 17:07:52 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void cmd_pwd(t_env *env)
 		env->stop = 1;
 		return;
 	}
-	write(1, getcwd(buf, 1000), str_len(getcwd(buf, 1000)));
+	write(1, getcwd(buf, 1000), slen(getcwd(buf, 1000)));
 	write(1, "\n", 1);
 	free(buf);
 	env->value = 0;
@@ -114,7 +114,7 @@ void cmd_echo(char **tab, t_env *env)
 
 	while (tab[i])
 	{
-		write(1, tab[i], str_len(tab[i]));
+		write(1, tab[i], slen(tab[i]));
 		i++;
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3))

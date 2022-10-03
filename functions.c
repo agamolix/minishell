@@ -6,14 +6,14 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/29 20:26:14 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 22:13:21 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-int str_len(char *str)
+int slen(char *str)
 {
     int len;
 
@@ -77,7 +77,7 @@ char	**my_split(char *s, char c)
 	while (s[0])
 	{
 		res[i] = line(s, c);
-		s = s + str_len(res[i]);
+		s = s + slen(res[i]);
 		s = forward(s, c);
 		i++;
 	}
@@ -121,10 +121,10 @@ char	*sub_str(char *s, unsigned int start, size_t len)
     i = 0;
     if (s == 0)
         return (0);
-    if ((int)start > str_len((char *)s))
+    if ((int)start > slen((char *)s))
         return (emptystr());
-    if (len > str_len((char *)s) - start)
-        res = malloc((str_len((char *)s) - start + 1) * sizeof(char));
+    if (len > slen((char *)s) - start)
+        res = malloc((slen((char *)s) - start + 1) * sizeof(char));
     else
         res = malloc((len + 1) * sizeof(char));
     if (res == 0)
@@ -137,6 +137,12 @@ char	*sub_str(char *s, unsigned int start, size_t len)
     res[i] = 0;
     return (res);
 }
+void *free_and_null(void *ptr)
+{
+	free (ptr);
+	ptr = NULL;
+	return (NULL);
+}
 
 char	*str_join(char *s1, char *s2)
 {
@@ -144,10 +150,15 @@ char	*str_join(char *s1, char *s2)
 	int			i;
 	int			j;
 	const char	*s = "";
+	int			null;
 
+	null = 0;
 	if (s1 == 0)
+	{
 		s1 = (char *)s;
-	res = malloc((str_len(s1) + str_len(s2) + 1) * sizeof(char));
+		null = 1;
+	}
+	res = malloc((slen(s1) + slen(s2) + 1) * sizeof(char));
 	if (res == 0)
 		return (0);
 	i = -1;
@@ -157,10 +168,10 @@ char	*str_join(char *s1, char *s2)
 	while (s2[++j])
 		res[i + j] = s2[j];
 	res[i + j] = 0;
-	if (s1 && *s1)
-		free(s1);
-	if (s2 && *s2)
-		free(s2);
+	if (s1 && !null)
+		s1 = free_and_null(s1);
+	if (s2)
+		s2 = free_and_null(s2);
 	return (res);
 }
 
@@ -170,7 +181,7 @@ char	*str_dup(char *src)
 	char	*s2;
 	int		i;
 
-	size = str_len(src) + 1;
+	size = slen(src) + 1;
 	s2 = malloc (size * sizeof(char));
 	if (s2 == 0)
 		return (0);

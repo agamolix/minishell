@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/02/08 16:14:27 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char *find_free_var(t_env *env, char *var)
 	i = 0;
 	while(env->env[i])
 	{
-		if (str_n_cmp(env->env[i], var, str_len(var)) == 0 && env->env[i][str_len(var)] == '=')
+		if (str_n_cmp(env->env[i], var, slen(var)) == 0 && env->env[i][slen(var)] == '=')
 		{
 			res = env->env[i];
 			while(res[0] != '=')

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 19:14:54 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct parse_vars
 
 
 //-----functions-----
-int str_len(char *str);
+int slen(char *str);
 char    *line(char *str, char c);
 char    *forward(char *str, char c);
 int     count(char *str, char c);

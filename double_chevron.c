@@ -20,9 +20,9 @@ char	*cas_heredoc(char *input, t_command *command, t_env *env)
 	printf("input_.beginning: %s\n", input);
 	terminator = str_n_dup(input, i);
 	heredoc_input = readline("heredoc> ");
-	while (str_n_cmp(heredoc_input, terminator, str_len(terminator) + 1))
+	while (str_n_cmp(heredoc_input, terminator, slen(terminator) + 1))
 	{
-		write(heredoc, heredoc_input, str_len(terminator));
+		write(heredoc, heredoc_input, slen(terminator));
 		free(heredoc_input);
 		write(heredoc, "\n", 1);
 		heredoc_input = readline("heredoc> ");
@@ -33,7 +33,7 @@ char	*cas_heredoc(char *input, t_command *command, t_env *env)
 	command->fd_in = command->fd_file_in;
 	input = input + i;
 	free(terminator);
-	if (str_len(input) == 0)
+	if (slen(input) == 0)
 		return (0);
 	return (input);
 }
@@ -60,7 +60,7 @@ char	*cas_append(char *input, t_command *command, t_env *env)
 	}
 	command->fd_out = command->fd_file_out;
 	input = input + i;
-	if (str_len(input) == 0)
+	if (slen(input) == 0)
 		return (0);
 	return (input);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atoi.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <atrilles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/04/22 17:41:03 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int is_unsigned_long_long(char *str)
 
     if (str[0] == '-')
         str++;
-    len_nb = str_len(str);
+    len_nb = slen(str);
     res = 0;
     while (len_nb > 0)
     {
@@ -65,7 +65,7 @@ long long int convert_long_long(char *str)
         sign = -1;
         str++;
     }
-    len_nb = str_len(str);
+    len_nb = slen(str);
     res = 0;
     while (len_nb > 0)
     {

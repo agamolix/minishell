@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/30 21:35:24 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char **modify_paths(char **paths)
 		temp = paths[i];
 		if (i == 0)
 		{
-			paths[i] = sub_str(paths[i], 5, str_len(paths[i]) - 5);
+			paths[i] = sub_str(paths[i], 5, slen(paths[i]) - 5);
 			free(temp);
 			temp = paths[i];
 		}
@@ -76,15 +76,15 @@ char *find_right_path(char **paths, char *cmd)
 	return (0);
 }
 
-int arr_len(char **arr)
-{
-	int	i;
+// int arr_len(char **arr)
+// {
+// 	int	i;
 
-	i = 0;
-	while (arr[i])
-		i++;
-	return (i);
-}
+// 	i = 0;
+// 	while (arr[i])
+// 		i++;
+// 	return (i);
+// }
 
 char	*relative_path(char *cmd)
 {

@@ -1,10 +1,6 @@
 #include "./libftextended/headers/libft.h"
 #include "minishell.h"
 #include <fcntl.h>
-char	*append_char(char *str, char c)
-{
-
-}
 
 char	*cas_heredoc(char *input, t_command *command, t_env *env)
 {
@@ -17,8 +13,8 @@ char	*cas_heredoc(char *input, t_command *command, t_env *env)
 	input += 2;
 	input = forward_space(input);
 	command->file_in = ".heredoc";
-	// if (command->fd_file_in) 
-		// close(command->fd_file_in);
+	if (command->fd_file_in) 
+		close(command->fd_file_in);
 	while (input[i] && maybe_char(input[i]))
 		i++;
 	printf("input_.beginning: %s\n", input);
@@ -44,7 +40,7 @@ char	*cas_heredoc(char *input, t_command *command, t_env *env)
 
 char	*cas_append(char *input, t_command *command, t_env *env)
 {
-	int i;
+	int	i;
 
 	input += 2;
 	input = forward_space(input);
@@ -52,20 +48,21 @@ char	*cas_append(char *input, t_command *command, t_env *env)
 	while (input[i] && maybe_char(input[i]))
 		i++;
 	command->file_out = str_n_dup(input, i);
-	command->fd_file_out = open(command->file_out, O_CREAT | O_WRONLY | O_APPEND);
+	command->fd_file_out = \
+		open(command->file_out, O_CREAT | O_WRONLY | O_APPEND);
 	if (command->fd_file_out == -1)
 	{
 		printf("%s: Open file error\n", command->file_out);
 		env->value = 1;
 		env->stop = 1;
 		free(command->file_out);
-		return(0);
+		return (0);
 	}
 	command->fd_out = command->fd_file_out;
 	input = input + i;
 	if (str_len(input) == 0)
-		return(0);
-	return(input);
+		return (0);
+	return (input);
 }
 
 

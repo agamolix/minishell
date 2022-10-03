@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/29 20:26:55 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 20:45:44 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ char *cas_single_quote(char *input, t_command *command, t_env *env)
 		printf("Input error: no end single quote\n");
 		env->value = 1;
 		env->stop = 1;
-		return(0);
+		return (0);
 	}
 	temp = str_n_dup(input, i);
 	temp = str_join(command->options, temp);
@@ -219,33 +219,27 @@ char *cas_single_quote(char *input, t_command *command, t_env *env)
 	return (input + 1);
 }
 
-char *cas_char(char *input, t_command *command, t_env *env)
+char	*cas_char(char *input, t_command *command, t_env *env)
 {
-	int i;
-	char *temp;
+	int		i;
+	char	*temp;
 	char	*dup;
 
 	i = 0;
-	while(input[i])
-	{
-		if (maybe_char(input[i]))
-			i++;
-		else 
-			break;
-	}
+	while (input[i] && maybe_char(input[i]))
+		i++;
 	dup = str_n_dup(input, i);
 	dup = replace_variable(dup, env);
 	temp = str_join(command->options, dup);
 	ft_printf("command->options: %s\n", command->options);
 	command->options = str_join(temp, ft_strdup(" "));
-
-	// free(temp);
-	// free(dup);
-
+	if (!*temp)
+		free(temp);
+	if (!*dup)
+		free(dup);
 	input = input + i;
 	if (str_len(input) == 0)
-		return(0);
-		
-	return(input);
+		return (0);
+	return (input);
 }
 

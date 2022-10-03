@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 19:14:38 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 20:46:05 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,9 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 		if (pid < 0)
 			break ;
 	}
-	init(command, 0);
+	init(
+		
+		command, 0);
 	env->stop = 0;
 	parse(argc, argv, env, command);	
 	return 0;

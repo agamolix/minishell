@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/29 20:35:43 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 19:14:38 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,10 @@ int execute(t_env *env, t_command *command)
 	return pid;
 }
 
+int	test(void)
+{
+	return (0);
+}
 // ^D displays on ctrl-D -> needs to be fixed
 int	handle_ctrl_c(void)
 {
@@ -112,7 +116,11 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 	while (input)
 	{
 		input = forward_space(input);
-		if (input[0] == '<')
+		if (!str_n_cmp(input, ">>", 2))
+			input = cas_append(input, command, env);
+		else if (!str_n_cmp(input, "<<", 2))
+			input = cas_heredoc(input, command, env);
+		else if (input[0] == '<')
 			input = cas_chevron_in(input, command, env);
 		else if (input[0] == '>')
 			input = cas_chevron_out(input, command, env);
@@ -193,7 +201,7 @@ int main(int argc, char **argv, char **envp)
 	
 	// newaction.sa_sigaction = &handle_ctrl_c;
 	signal(SIGINT, handle_ctrl_c);
-	// signal(SIGQUIT, )
+	signal(SIGQUIT, test);
 	// sigaction(SIGINT, &newaction, NULL);
 	// sigaction(SIGINT, &newaction, &parser_vars);
 	// signal(SIGINT, SIG_IGN);

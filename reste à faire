@@ -17,8 +17,8 @@ PATH d'environnement
 - Mettez plusieurs répertoires à PATH (directory1:directory2) et vérifiez
 qu'ils sont bien évalués de gauche à droite.
 
+segfault ctrl_d sur heredoc
 
-cat | cat | ls' doit fonctionner. JE COMPRENDS PAS
                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
 

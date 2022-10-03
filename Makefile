@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/09/20 16:56:28 by gmillon          ###   ########.fr        #
+#    Updated: 2022/09/30 21:59:49 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LIBFTINCLUDES = $(LIBFTDIR)/headers
 ######## SOURCE FILES ##########################################################
 
 SRC_FILES =		main		functions 	paths  export_unset  cmd atoi  var\
-				init		case_parse	do_command	data_utils
+				init		case_parse	do_command	data_utils	double_chevron
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addsuffix .o, $(SRC_FILES))
@@ -41,6 +41,10 @@ all: $(NAME)
 $(NAME): $(OBJ) $(LIBFTDIR)/libft.a
 	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
 	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline -lncurses libreadline.a $(LIBFTDIR)/libft.a
+
+asan: $(OBJ) $(LIBFTDIR)/libft.a
+	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
+	$(CC) -fsanitize=address $(OBJ) -o $(NAME) -lreadline -lncurses libreadline.a $(LIBFTDIR)/libft.a
 
 %.o: %.c
 	# $(CC) $(CFLAGS) -c $< -o $@

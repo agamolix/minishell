@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/09/29 20:36:07 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/03 19:14:54 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ void    free_split(char **arr);
 //-----case_parse-----
 char *forward_space(char *input);
 int maybe_char(char c);
+char	*cas_heredoc(char *input, t_command *command, t_env *env);
+char	*cas_append(char *input, t_command *command, t_env *env);
 char *cas_chevron_in(char *input, t_command *command, t_env *env);
 char *cas_chevron_out(char *input, t_command *command, t_env *env);
 char *cas_pipe(char *input);

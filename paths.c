@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <atrilles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/20 12:43:54 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/09/30 21:35:24 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ char **modify_paths(char **paths)
 			free(temp);
 			temp = paths[i];
 		}
-		paths[i] = str_join(paths[i], "/");
-		free (temp);
+		paths[i] = str_join(paths[i], ft_strdup("/"));
+		// free (temp);
 		i++;
 	}
 	return (paths);
@@ -67,10 +67,10 @@ char *find_right_path(char **paths, char *cmd)
 		if (cmd[0] == '/')
 			path = cmd;
 		else
-			path = str_join(paths[i], cmd);
+			path = str_join(ft_strdup(paths[i]), ft_strdup(cmd));
 		if (access(path, F_OK || X_OK) == 0)
 			return (path);
-		free(temp);
+		// free(temp);
 		i++;
 	}
 	return (0);
@@ -137,6 +137,7 @@ char *find_path(t_env *env, char *cmd)
 	
 	paths = find_paths(env);
 	rel_path = relative_path(cmd);
+	//TODO	if (!path || !*paths) if split is empth
 	if (paths == 0)
 	{
 		perror("Path error");

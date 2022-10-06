@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   do_command.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrilles <atrilles@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/07/20 12:45:28 by atrilles         ###   ########.fr       */
+/*   Updated: 2022/10/06 23:30:53 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-int do_command(char **tab, t_env *env, t_command *command)
+
+int	do_command(char **tab, t_env *env, t_command *command)
 {
-	pid_t pid;
-	int status;
-	char *path;
+	pid_t	pid;
+	int		status;
+	char	*path;
 
 	pid = fork();
 	if (pid == -1) //echec fork
@@ -53,7 +54,7 @@ int do_command(char **tab, t_env *env, t_command *command)
 
 		if (str_n_cmp(tab[0], "echo", 5) == 0)
 		{
-			cmd_echo(tab, env);
+			cmd_echo(tab, env, command);
 			if (env->value == 1) exit(EXIT_FAILURE);
 			exit(EXIT_SUCCESS);
 		}
@@ -78,6 +79,10 @@ int do_command(char **tab, t_env *env, t_command *command)
 //			printf("path: %s\n", path);
 			execve(path, tab, NULL);
 		}
+	}
+	else
+	{
+
 	}
 
 	if (command->fd_in) close(command->fd_in);

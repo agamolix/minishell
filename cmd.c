@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 00:49:27 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,43 @@ void cmd_pwd(t_env *env)
 	free(buf);
 	env->value = 0;
 }
+char	**echo_double_quotes(char *arg, char **tab)
+{
+	static char	*subset = NULL;
+	char		*substr;
+	int			start;
+	int			len;
 
-void cmd_echo(char **tab, t_env *env)
+	if (subset == NULL)
+		subset = arg;
+	if (arg == NULL)
+	{
+		subset = NULL;
+		return (NULL);
+	}
+	start = ft_strchr_index(subset, '\"') + 1;
+	// ft_printf("start: %d\n", start);
+	// # ft_printf("substr + start + 1: %s\n", &substr[start + 1]);
+	len = ft_strchr_index(subset + start, '\"');
+	// ft_printf("len: %d\n", len);
+	substr = ft_substr(subset, start, len);
+	// ft_printf("substr: %s\n", substr);
+	write(1, substr, slen(substr));
+	free(substr);
+	if (tab)
+		free(tab);
+	subset = subset + start + len + 1;
+	if (!subset || !*subset)
+		return (ft_split("", 0));
+	// ft_printf("subset: %s\n", subset);
+	return (ft_split(subset, ' '));
+}
+void	cmd_echo(char **tab, t_env *env, t_command *command)
 {
 	int i = 1;
+	int	j;
 
+	ft_printf("command->options: %s\n", command->options);
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
 	{
 		put_nbr_fd(env->value, 1);
@@ -111,10 +143,28 @@ void cmd_echo(char **tab, t_env *env)
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
-
+	// if quotes, print w substr ftsrtchr, then remake tab with split on incrementted input. 
 	while (tab[i])
 	{
-		write(1, tab[i], slen(tab[i]));
+		// write(1, tab[i], slen(tab[i]));
+		j = 0;
+		while (tab[i][j])
+		{
+			if (tab[i][j] == '\"')
+			{
+				tab = echo_double_quotes(command->options, tab);
+				// ft_printf("\n New arr: ");
+				// ft_print_str_arr(tab);
+				i =  -1;
+				j = 0;
+				// exit(0);
+				break;
+			}
+			write(1, &tab[i][j], 1);
+			j++;
+		}
+		if (tab[i + 1] && i != -1)
+			write(1, " ", 1);
 		i++;
 	}
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3))

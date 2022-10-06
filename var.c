@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 01:02:03 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char *find_free_var(t_env *env, char *var)
 			while(res[0] != '=')
 				res++;
 			res++;
-			return (res);
+			return (ft_strdup(res));
 		}
 		i++;
 	}

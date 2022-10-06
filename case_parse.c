@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 22:14:37 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 01:02:22 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,10 @@ char *insert_variable(char *str, int index1, int index2, char *val)
 	{
 		temp = str_join(part1, val);
 		res = str_join(temp, part2);
-		free(temp);
+		// free(temp);
 	}
-	free(part1);
-	free(part2);
+	// free(part1);
+	// free(part2);
 	free(str);
 	return (res);
 }
@@ -155,32 +155,26 @@ char *replace_variable(char *temp, t_env *env)
 	return (temp);
 }
 
-char *cas_double_quote(char *input, t_command *command, t_env *env)
+char	*cas_double_quote(char *input, t_command *command, t_env *env)
 {
-	int i;
-	char *temp;
+	int		i;
+	char	*temp;
 
-	i = 0;
-	input++;
-	while(input[i])
-	{
-		if (input[i] != '"')
-			i++;
-		else 
-			break;
-	}
+	i = 1;
+	// input++;
+	while (input[i] && input[i] != '"')
+		i++;
 	if (!input[i])
 	{
 		printf("Input error: no end double quote\n");
 		env->value = 1;
 		env->stop = 1;
-		return(0);
+		return (0);
 	}
 	temp = str_n_dup(input, i);
 	temp = replace_variable(temp, env);
 	temp = str_join(command->options, temp);
-	command->options = str_join(temp, ft_strdup(" "));
-	free(temp);
+	command->options = str_join(temp, ft_strdup("\" "));
 	input = input + i;
 	if (slen(input) == 1)
 		return (0);
@@ -231,7 +225,7 @@ char	*cas_char(char *input, t_command *command, t_env *env)
 	dup = str_n_dup(input, i);
 	dup = replace_variable(dup, env);
 	temp = str_join(command->options, dup);
-	ft_printf("command->options: %s\n", command->options);
+	// ft_printf("command->options: %s\n", command->options);
 	command->options = str_join(temp, ft_strdup(" "));
 	input = input + i;
 	if (slen(input) == 0)

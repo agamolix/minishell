@@ -20,9 +20,9 @@ char	*cas_heredoc(char *input, t_command *command, t_env *env)
 	printf("input_.beginning: %s\n", input);
 	terminator = str_n_dup(input, i);
 	heredoc_input = readline("heredoc> ");
-	while (str_n_cmp(heredoc_input, terminator, slen(terminator) + 1))
+	while (heredoc_input && str_n_cmp(heredoc_input, terminator, slen(terminator) + 1))
 	{
-		write(heredoc, heredoc_input, slen(terminator));
+		write(heredoc, heredoc_input, slen(heredoc_input));
 		free(heredoc_input);
 		write(heredoc, "\n", 1);
 		heredoc_input = readline("heredoc> ");

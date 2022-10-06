@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/06 23:12:26 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void cmd_exit(char **tab, t_env *env);
 int cmd_cd(char **tab, t_env *env);
 void cmd_env(t_env *env, char **tab);
 void cmd_pwd(t_env *env);
-void cmd_echo(char **tab, t_env *env);
+void cmd_echo(char **tab, t_env *env, t_command *command);
 
 //-----export_unset-----
 char *exist_var(t_env *env, char *var);

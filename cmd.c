@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 02:43:21 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 02:56:02 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	**double_quotes_newtab(char *subset)
 	return (split);
 }
 
-char	**echo_double_quotes(char *arg, char **tab)
+char	**echo_double_quotes(char *arg, char **tab, char target_char)
 {
 	static char	*subset = NULL;
 	char		*substr;
@@ -125,10 +125,10 @@ char	**echo_double_quotes(char *arg, char **tab)
 		subset = NULL;
 		return (NULL);
 	}
-	start = ft_strchr_index(subset, '\"') + 1;
+	start = ft_strchr_index(subset, target_char) + 1;
 	// ft_printf("start: %d\n", start);
 	// # ft_printf("substr + start + 1: %s\n", &substr[start + 1]);
-	len = ft_strchr_index(subset + start, '\"');
+	len = ft_strchr_index(subset + start, target_char);
 	// ft_printf("len: %d\n", len);
 	substr = ft_substr(subset, start, len);
 	// ft_printf("substr: %s\n", substr);
@@ -162,9 +162,9 @@ void	cmd_echo(char **tab, t_env *env, t_command *command)
 		j = 0;
 		while (tab[i][j])
 		{
-			if (tab[i][j] == '\"')
+			if (tab[i][j] == '\"' || tab[i][j] == '\'')
 			{
-				tab = echo_double_quotes(command->options, tab);
+				tab = echo_double_quotes(command->options, tab, tab[i][j]);
 				// ft_printf("\n New arr: ");
 				// ft_print_str_arr(tab);
 				i =  -1;

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 00:49:27 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 02:43:21 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,18 @@ void cmd_pwd(t_env *env)
 	free(buf);
 	env->value = 0;
 }
+
+char	**double_quotes_newtab(char *subset)
+{
+	char	**split;
+	char	**result;
+	split = ft_split(subset, ' ');
+	if (subset && *subset != ' ')
+		return (split);
+	split[0] = str_join(ft_strdup(" "), split[0]);
+	return (split);
+}
+
 char	**echo_double_quotes(char *arg, char **tab)
 {
 	static char	*subset = NULL;
@@ -128,7 +140,7 @@ char	**echo_double_quotes(char *arg, char **tab)
 	if (!subset || !*subset)
 		return (ft_split("", 0));
 	// ft_printf("subset: %s\n", subset);
-	return (ft_split(subset, ' '));
+	return (double_quotes_newtab(subset));
 }
 void	cmd_echo(char **tab, t_env *env, t_command *command)
 {

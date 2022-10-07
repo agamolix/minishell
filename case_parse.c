@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 01:02:22 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 01:54:30 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,10 +171,12 @@ char	*cas_double_quote(char *input, t_command *command, t_env *env)
 		env->stop = 1;
 		return (0);
 	}
-	temp = str_n_dup(input, i);
+	temp = str_n_dup(input, i + 1);
 	temp = replace_variable(temp, env);
 	temp = str_join(command->options, temp);
-	command->options = str_join(temp, ft_strdup("\" "));
+	command->options = temp;
+	if (input[i + 1] && input[i + 1] == ' ')
+		command->options = str_join(command->options, ft_strdup(" "));
 	input = input + i;
 	if (slen(input) == 1)
 		return (0);

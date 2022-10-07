@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/10/07 21:09:09 by gmillon          ###   ########.fr        #
+#    Updated: 2022/10/07 23:46:11 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ LIBFTINCLUDES = $(LIBFTDIR)/headers
 
 SRC_FILES =		main		functions 	paths  export_unset  cmd atoi  var\
 				init		case_parse	do_command	data_utils	double_chevron\
-				input_traversal	case_parse_2 var_substitution cmd_echo\
+				input_traversal	case_parse_2 var_substitution cmd_echo utils\
+				utils2 utils3 relative_paths
 
 
 SRC = $(addsuffix .c, $(SRC_FILES))
@@ -53,6 +54,7 @@ asan: $(OBJ) $(LIBFTDIR)/libft.a
 	$(CC) -ggdb3 -c -I$(LIBFTINCLUDES) $< -o $@ -lreadline -L .brew/opt/readline/lib -I .brew/opt/readline/include 
 
 $(LIBFTDIR)/libft.a:
+	git submodule update --remote
 	$(MAKE) -C $(LIBFTDIR)
 read: read_test.o
 	gcc read_test.o -o read -lreadline -L .brew/opt/readline/lib -I .brew/opt/readline/include 

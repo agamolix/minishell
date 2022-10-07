@@ -6,53 +6,56 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 21:55:09 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *exist_var(t_env *env, char *str)
+char	*exist_var(t_env *env, char *str)
 {
-	int i = 0;
-	char *var;
+	int		i;
+	char	*var;
 
+	i = 0;
 	while (str[i] && str[i] != '=')
 		i++;
 	if (str[i] != '=')
-		return 0;
+		return (0);
 	var = sub_str(str, 0, i);
 	i = 0;
 	while (env->env[i])
 	{
-		if (str_n_cmp(env->env[i], var, slen(var)) == 0 && 
-		env->env[i][slen(var)] == '=')
+		if (str_n_cmp(env->env[i], var, slen(var)) == 0 && \
+			env->env[i][slen(var)] == '=')
 			return (var);
 		i++;
 	}
 	return (0);
 }
 
-char **remove_var(t_env *env, char *var)
+char	**remove_var(t_env *env, char *var)
 {
-	char **res;
-	int i = 0;
-	int tot = 0;
+	char	**res;
+	int		i;
+	int		tot;
 
+	i = 0;
+	tot = 0;
 	while (env->env[i])
 	{
-		if (str_n_cmp(env->env[i], var, slen(var)) != 0 || 
-		env->env[i][slen(var)] != '=')
+		if (str_n_cmp(env->env[i], var, slen(var)) != 0 || \
+			env->env[i][slen(var)] != '=')
 			tot++;
 		i++;
 	}
 	res = malloc(sizeof(char *) * (tot + 1));
 	i = 0;
 	tot = 0;
-	while(env->env[i])
+	while (env->env[i])
 	{
-		if (str_n_cmp(env->env[i], var, slen(var)) != 0 || 
-		env->env[i][slen(var)] != '=')
+		if (str_n_cmp(env->env[i], var, slen(var)) != 0 || \
+			env->env[i][slen(var)] != '=')
 		{
 			res[tot] = str_dup(env->env[i]);
 			tot++;
@@ -65,9 +68,9 @@ char **remove_var(t_env *env, char *var)
 	return (res);
 }
 
-int cmd_unset(t_env *env, char **tab)
+int	cmd_unset(t_env *env, char **tab)
 {
-	if(str_chr(tab[1], '='))
+	if (str_chr(tab[1], '='))
 	{
 		printf("Error unset: identifier not valid\n");
 		env->value = 1;
@@ -78,16 +81,17 @@ int cmd_unset(t_env *env, char **tab)
 	return (0);
 }
 
-char **add_var(t_env *env, char *var)
+char	**add_var(t_env *env, char *var)
 {
-	char **res;
-	int i = 0;
+	char	**res;
+	int		i;
 
+	i = 0;
 	while (env->env[i])
 		i++;
 	res = malloc(sizeof(char *) * (i + 2));
 	i = 0;
-	while(env->env[i])
+	while (env->env[i])
 	{
 		res[i] = str_dup(env->env[i]);
 		free(env->env[i]);
@@ -99,11 +103,11 @@ char **add_var(t_env *env, char *var)
 	return (res);
 }
 
-int cmd_export(t_env *env, char **tab)
+int	cmd_export(t_env *env, char **tab)
 {
-	char *var;
+	char	*var;
 
-	if(!str_chr(tab[1], '='))
+	if (!str_chr(tab[1], '='))
 	{
 		printf ("Error export : '=' nothing happens on bash\n");
 		env->value = 0;

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 20:41:26 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/07 20:41:36 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 22:04:09 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,5 @@ char	*cas_append(char *input, t_command *command, t_env *env)
 // 	t_env		*e;
 // 	init(t, 1);
 // 	cas_heredoc("<< x", t, e);
-// 	return(0);
+// 	return (0);
 // }

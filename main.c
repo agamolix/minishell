@@ -6,46 +6,47 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/04 21:54:57 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 23:24:22 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **copy_env(char **envp)
+char	**copy_env(char **envp)
 {
-	char **res;
-	int i = 0;
+	char	**res;
+	int		i;
 
-	while(envp[i])
+	i = 0;
+	while (envp[i])
 		i++;
 	res = malloc(sizeof(char *) * (i + 1));
 	i = 0;
-	while(envp[i])
+	while (envp[i])
 	{
 		res[i] = str_dup(envp[i]);
 		i++;
 	}
 	res[i] = 0;
-	return res;
+	return (res);
 }
 
-int execute(t_env *env, t_command *command)
+void	handle_pipe_flag_in(t_command *command, t_env *env)
 {
-	char **tab;
-	int my_pipe[2];
-	int pid;
-
-	if (command->pipe_flag_in) 
+	command->fd_in = command->fd_pipe_in;
+	if (command->fd_file_in)
 	{
-		command->fd_in = command->fd_pipe_in;
-		if (command->fd_file_in) 
-		{
-			close(command->fd_in);
-			command->fd_in = command->fd_file_in;
-		}
+		close(command->fd_in);
+		command->fd_in = command->fd_file_in;
 	}
-	
+}
+
+int	handle_pipes(t_command *command, t_env *env)
+{
+	int		my_pipe[2];
+
+	if (command->pipe_flag_in)
+		handle_pipe_flag_in(command, env);
 	if (command->pipe_flag_out)
 	{
 		if (pipe(my_pipe) == -1)
@@ -53,22 +54,28 @@ int execute(t_env *env, t_command *command)
 			printf("Pipe error\n");
 			env->value = 1;
 			env->stop = 1;
-			return (env->value);
+			return (0);
 		}
-		command->fd_pipe_in_next = my_pipe[0]; //8
-		command->fd_pipe_out = my_pipe[1];  //7
-
-//		if (command->fd_file_in)
-//			command->fd_in = command->fd_file_in;
-
+		command->fd_pipe_in_next = my_pipe[0];
+		command->fd_pipe_out = my_pipe[1];
 		command->fd_out = command->fd_pipe_out;
-		if (command->fd_file_out) 
+		if (command->fd_file_out)
 		{
 			close(command->fd_out);
 			command->fd_out = command->fd_file_out;
 		}
 	}
+	return (1);
+}
 
+int	execute(t_env *env, t_command *command)
+{
+	char	**tab;
+	int		my_pipe[2];
+	int		pid;
+
+	if (!handle_pipes(command, env))
+		return (env->value);
 	tab = my_split(command->options, ' ');
 	if (str_n_cmp(tab[0], "cd", 3) == 0)
 		cmd_cd(tab, env);
@@ -85,14 +92,15 @@ int execute(t_env *env, t_command *command)
 		pid = do_command(tab, env, command);
 	init_cmd(command);
 	free_split(tab);
-	return pid;
+	return (pid);
 }
 
-int	test(void)
-{
-	return (0);
-}
 // ^D displays on ctrl-D -> needs to be fixed
+void	test(void)
+{
+
+}
+
 int	handle_ctrl_c(void)
 {
 	ft_printf("\n");
@@ -101,62 +109,84 @@ int	handle_ctrl_c(void)
 	rl_redisplay();
 }
 
-int parse(int argc, char **argv, t_env *env, t_command *command)
+char	*check_special_chars(char *input, t_command *command, t_env *env)
+{
+	if (!str_n_cmp(input, ">>", 2))
+		return (cas_append(input, command, env));
+	else if (!str_n_cmp(input, "<<", 2))
+		return (cas_heredoc(input, command, env));
+	else if (input[0] == '<')
+		return (cas_chevron_in(input, command, env));
+	else if (input[0] == '>')
+		return (cas_chevron_out(input, command, env));
+	else if (input[0] == '"')
+		return (cas_double_quote(input, command, env));
+	else if (input[0] == '\'')
+		return (cas_single_quote(input, command, env));
+	return (input);
+}
+
+void	pipe_var_set(t_command *command)
+{
+	command->pipe_flag_out = 0;
+	command->pipe_flag_in = 1;
+	command->fd_pipe_in = command->fd_pipe_in_next;
+	command->fd_out = 1;
+}
+
+int	parse_input(char *input, t_vars vars, int *pid, char *free_ptr)
+{
+	while (input)
+	{
+		input = forward_space(input);
+		input = check_special_chars(input, vars.command, vars.env);
+		if (input && input[0] == '|')
+		{
+			input = cas_pipe(input, vars.command);
+			if (vars.command->options && vars.command->options[0]!= ' ' && vars.env->stop == 0)
+				*pid = execute(vars.env, vars.command);
+			else
+			{
+				printf("Error pipe: stop pipe\n");
+				init(vars.command, 0);
+				free(free_ptr);
+				parse_loop(vars.argc, vars.argv, vars.env, vars.command);	
+			}
+			pipe_var_set(vars.command);
+		}		
+		else if (input)
+			input = cas_char(input, vars.command, vars.env);
+	}
+}
+
+t_vars	make_var_struct(int argc, char **argv, t_env *env, t_command *command)
+{
+	t_vars	vars;
+
+	vars.argc = argc;
+	vars.argv = argv;
+	vars.env = env;
+	vars.command = command;
+	return (vars);
+}
+
+
+int parse_loop(int argc, char **argv, t_env *env, t_command *command)
 {
 	char	*input;
 	pid_t	lastpid;
 	pid_t	pid;
 	int		status;
-	char	*free_ptr ;
+	char	*free_ptr;
 
 	input = readline("$> ");
 	free_ptr = input;
 	if (!input)
 		exit(0);
 	add_history(input);
-	while (input)
-	{
-		input = forward_space(input);
-		if (!str_n_cmp(input, ">>", 2))
-			input = cas_append(input, command, env);
-		else if (!str_n_cmp(input, "<<", 2))
-			input = cas_heredoc(input, command, env);
-		else if (input[0] == '<')
-			input = cas_chevron_in(input, command, env);
-		else if (input[0] == '>')
-			input = cas_chevron_out(input, command, env);
-		else if (input[0] == '"')
-			input = cas_double_quote(input, command, env);
-		else if (input[0] == '\'')
-			input = cas_single_quote(input, command, env);
-		else if (input[0] == '|')
-		{
-			input = cas_pipe(input);
-			command->pipe_flag_out = 1;
-			if (command->options && command->options[0]!= ' ' && env->stop == 0)
-				pid = execute(env, command);
-			else
-			{
-				printf("Error pipe: stop pipe\n");
-				init(command, 0);
-				free(free_ptr);
-				parse(argc, argv, env, command);	
-			}
-			command->pipe_flag_out = 0;
-			command->pipe_flag_in = 1;
-			command->fd_pipe_in = command->fd_pipe_in_next;
-			command->fd_out = 1;
-		}		
-		else
-			input = cas_char(input, command, env);
-	}
+	parse_input(input, make_var_struct(argc, argv, env, command), &pid, free_ptr);
 	free(free_ptr);
-	
-//	printf("final command = <%s>\n", command->options);
-//	printf("value = %d\n", env->value);
-//	printf("stop = %d\n", env->stop);
-
-	if(env->stop == 0)
+	if (env->stop == 0)
 	{
 		if (command->options && command->options[0]!= ' ')
 			lastpid = execute(env, command);
@@ -173,7 +203,7 @@ int parse(int argc, char **argv, t_env *env, t_command *command)
 	}
 	init(command, 0);
 	env->stop = 0;
-	parse(argc, argv, env, command);	
+	parse_loop(argc, argv, env, command);	
 	return 0;
 }
 
@@ -189,8 +219,9 @@ void	signal_handler(int sig_num, siginfo_t *info, void *parser_vars)
 
 	init(cast_vars->mycommand, 0);
 	cast_vars->myenv->stop = 0;
-	parse(cast_vars->argc, cast_vars->argv, cast_vars->myenv, cast_vars->mycommand);
+	parse_loop(cast_vars->argc, cast_vars->argv, cast_vars->myenv, cast_vars->mycommand);
 }
+
 //Signal handling approach doesn't work: ignoe sigint and instead parse it in the parserfunction
 int main(int argc, char **argv, char **envp)
 {
@@ -211,6 +242,6 @@ int main(int argc, char **argv, char **envp)
 	myenv.stop = 0;
 	myenv.env = copy_env(envp);
 
-	parse(argc, argv, &myenv, &mycommand);
+	parse_loop(argc, argv, &myenv, &mycommand);
 	return 0;
 }

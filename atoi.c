@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/03 22:03:04 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/07 22:04:09 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ char *itoa(int nb)
 	char *res;
 
 	if (nb == 0)
-		return(str_dup("0"));
+		return (str_dup("0"));
 	nb2 = nb;
 	i = 1;
-	while(nb2 / 10 > 0)
+	while (nb2 / 10 > 0)
 	{
 		i++;
 		nb2 = nb2 / 10;
@@ -96,11 +96,11 @@ char *itoa(int nb)
 	res = malloc(sizeof(char) * (i + 1));
 	res[i] = 0;
 	i--;
-	while(nb > 0)
+	while (nb > 0)
 	{
 		res[i] = (nb % 10) + '0';
 		nb = nb / 10; 
 		i--;
 	}	
-	return(res);
+	return (res);
 }

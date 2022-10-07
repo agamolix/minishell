@@ -1,6 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   double_chevron.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/07 20:41:26 by gmillon           #+#    #+#             */
+/*   Updated: 2022/10/07 20:41:36 by gmillon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./libftextended/headers/libft.h"
 #include "minishell.h"
 #include <fcntl.h>
+
+char	*update_heredoc(int heredoc, char *heredoc_input)
+{
+	write(heredoc, heredoc_input, slen(heredoc_input));
+	free(heredoc_input);
+	write(heredoc, "\n", 1);
+	heredoc_input = readline("heredoc> ");
+	return (heredoc_input);
+}
 
 char	*cas_heredoc(char *input, t_command *command, t_env *env)
 {
@@ -10,32 +31,25 @@ char	*cas_heredoc(char *input, t_command *command, t_env *env)
 	char		*terminator;	
 
 	i = 0;
-	input += 2;
-	input = forward_space(input);
+	input = forward_space(input + 2);
 	command->file_in = ".heredoc";
-	if (command->fd_file_in) 
+	if (command->fd_file_in)
 		close(command->fd_file_in);
 	while (input[i] && maybe_char(input[i]))
 		i++;
-	printf("input_.beginning: %s\n", input);
 	terminator = str_n_dup(input, i);
 	heredoc_input = readline("heredoc> ");
-	while (heredoc_input && str_n_cmp(heredoc_input, terminator, slen(terminator) + 1))
-	{
-		write(heredoc, heredoc_input, slen(heredoc_input));
-		free(heredoc_input);
-		write(heredoc, "\n", 1);
-		heredoc_input = readline("heredoc> ");
-	}
+	while (heredoc_input && \
+			str_n_cmp(heredoc_input, terminator, slen(terminator) + 1))
+		heredoc_input = update_heredoc(heredoc, heredoc_input);
 	free(heredoc_input);
 	close(heredoc);
 	command->fd_file_in = open(".heredoc", O_RDONLY);
 	command->fd_in = command->fd_file_in;
-	input = input + i;
 	free(terminator);
-	if (slen(input) == 0)
+	if (slen(input + i) == 0)
 		return (0);
-	return (input);
+	return (input + i);
 }
 
 char	*cas_append(char *input, t_command *command, t_env *env)
@@ -64,9 +78,6 @@ char	*cas_append(char *input, t_command *command, t_env *env)
 		return (0);
 	return (input);
 }
-
-
-
 
 // int main(void)
 // {

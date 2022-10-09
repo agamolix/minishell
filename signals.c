@@ -6,13 +6,14 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 03:00:49 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/09 03:00:57 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 04:20:05 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	test(void)
+void	test(int sig)
 {
+	(void) sig;
 	return ;
 }

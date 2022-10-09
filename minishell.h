@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 04:02:44 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 04:51:57 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void			put_nbr_fd(int n, int fd);
 int				do_command(char	**tab, t_env *env, t_command *command);
 
 // SIGNALS
-void			test(void);
+void			test(int sig);
 
 //--			--paths-----
 

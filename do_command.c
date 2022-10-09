@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 23:53:06 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 04:04:47 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,18 @@ void	close_fds(t_command *command)
 		close(command->fd_out);
 }
 
+int	handle_fork_err(int pid, t_env *env)
+{
+	if (pid == -1)
+	{
+		perror("Fork error");
+		env->value = 1;
+		env->stop = 1;
+		return (0);
+	}
+	return (1);
+}
+
 int	do_command(char **tab, t_env *env, t_command *command)
 {
 	pid_t	pid;
@@ -79,13 +91,8 @@ int	do_command(char **tab, t_env *env, t_command *command)
 	char	*path;
 
 	pid = fork();
-	if (pid == -1)
-	{
-		perror("Fork error");
-		env->value = 1;
-		env->stop = 1;
+	if (!handle_fork_err(pid, env))
 		return (env->value);
-	}
 	else if (pid == 0)
 	{
 		if (!handle_fd_dup(command, env))
@@ -99,17 +106,5 @@ int	do_command(char **tab, t_env *env, t_command *command)
 		execve(path, tab, NULL);
 	}
 	close_fds(command);
-/*
-	else //processus père
-	{
-		if (command->fd_in) close(command->fd_in);
-		if (command->fd_out != 1) close(command->fd_out);
-		wait(&status);
-		env->value = WEXITSTATUS(status);
-		if (env->value)
-			env->stop = 1;
-		kill(pid, SIGTERM);
-	}
-*/
 	return (pid);
 }

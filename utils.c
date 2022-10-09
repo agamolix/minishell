@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 22:00:07 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/07 22:01:19 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 02:13:40 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	slen(char *str)
 	int	len;
 
 	len = 0;
-	while (str[len])
+	while (str && str[len])
 		len++;
 	return (len);
 }

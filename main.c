@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 23:24:22 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 03:13:44 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,6 @@ int	execute(t_env *env, t_command *command)
 }
 
 // ^D displays on ctrl-D -> needs to be fixed
-void	test(void)
-{
-
-}
-
 int	handle_ctrl_c(void)
 {
 	ft_printf("\n");
@@ -190,8 +185,6 @@ int parse_loop(int argc, char **argv, t_env *env, t_command *command)
 	{
 		if (command->options && command->options[0]!= ' ')
 			lastpid = execute(env, command);
-		else
-			printf("Error: empty command\n");
 	}
 	while (1)
 	{

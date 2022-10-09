@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 23:55:56 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 04:02:44 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,14 @@ void			put_nbr_fd(int n, int fd);
 //--			--do_command-----
 int				do_command(char	**tab, t_env *env, t_command *command);
 
+// SIGNALS
+void			test(void);
+
 //--			--paths-----
 
 char			*relative_path(char *cmd);
 char			**build_relative_path(char **absolute_path, \
-										char **folders_in_path, \
-										int current_folder_index);
+										char **folders_in_path);
 char			**find_paths(t_env *env);
 char			**modify_paths(char	**paths);
 char			*find_right_path(char	**paths, char	*cmd);

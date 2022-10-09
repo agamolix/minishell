@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_unset.c                                     :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 21:55:09 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 02:57:45 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,25 @@ char	*exist_var(t_env *env, char *str)
 			return (var);
 		i++;
 	}
+	free(var);
 	return (0);
+}
+
+int	get_remove_tot(t_env *env, char *var)
+{
+	int	i;
+	int	tot;
+
+	tot = 0;
+	i = 0;
+	while (env->env[i])
+	{
+		if (str_n_cmp(env->env[i], var, slen(var)) != 0 || \
+			env->env[i][slen(var)] != '=')
+			tot++;
+		i++;
+	}
+	return (tot);
 }
 
 char	**remove_var(t_env *env, char *var)
@@ -40,15 +58,7 @@ char	**remove_var(t_env *env, char *var)
 	int		i;
 	int		tot;
 
-	i = 0;
-	tot = 0;
-	while (env->env[i])
-	{
-		if (str_n_cmp(env->env[i], var, slen(var)) != 0 || \
-			env->env[i][slen(var)] != '=')
-			tot++;
-		i++;
-	}
+	tot = get_remove_tot(env, var);
 	res = malloc(sizeof(char *) * (tot + 1));
 	i = 0;
 	tot = 0;
@@ -78,57 +88,5 @@ int	cmd_unset(t_env *env, char **tab)
 		return (env->value);
 	}
 	env->env = remove_var(env, tab[1]);
-	return (0);
-}
-
-char	**add_var(t_env *env, char *var)
-{
-	char	**res;
-	int		i;
-
-	i = 0;
-	while (env->env[i])
-		i++;
-	res = malloc(sizeof(char *) * (i + 2));
-	i = 0;
-	while (env->env[i])
-	{
-		res[i] = str_dup(env->env[i]);
-		free(env->env[i]);
-		i++;
-	}
-	res[i] = var;
-	res[i + 1] = 0;
-	free(env->env);
-	return (res);
-}
-
-int	cmd_export(t_env *env, char **tab)
-{
-	char	*var;
-
-	if (!str_chr(tab[1], '='))
-	{
-		printf ("Error export : '=' nothing happens on bash\n");
-		env->value = 0;
-		env->stop = 1;
-		return (env->value);
-	}
-	if (tab[2])
-	{
-		printf ("Error export: invalid identifier\n");
-		env->value = 1;
-		env->stop = 1;
-		return (env->value);
-	}
-	var = exist_var(env, tab[1]);
-	if (var != 0)
-	{
-		env->env = remove_var(env, var);
-		free(var);
-		env->env = add_var(env, tab[1]);
-	}
-	else
-		env->env = add_var(env, tab[1]);
 	return (0);
 }

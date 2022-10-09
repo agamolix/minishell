@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 23:43:31 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 04:04:36 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ char	*find_path(t_env *env, char *cmd)
 
 	paths = find_paths(env);
 	rel_path = relative_path(cmd);
-	//TODO	if (!path || !*paths) if split is empth
 	if (paths == 0)
 	{
 		perror("Path error");
@@ -103,12 +102,5 @@ char	*find_path(t_env *env, char *cmd)
 	}
 	modify_paths(&paths[0]);
 	env_path = find_right_path(&paths[0], cmd);
-	// if (path == 0)
-	// {
-	// 	perror("Path error");
-	// 	env->value = 126;
-	// 	env->stop = 1;
-	// 	return (0);
-	// }
 	return (validate_path(rel_path, env_path, env));
 }

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 21:01:02 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/07 23:54:19 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 03:42:41 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ char	**echo_double_quotes(char *arg, char **tab, char target_char)
 	start = ft_strchr_index(subset, target_char) + 1;
 	len = ft_strchr_index(subset + start, target_char);
 	substr = ft_substr(subset, start, len);
-	write(1, substr, slen(substr));
+	// ft_printf("slen(substr): %d\n", slen(substr));
+	if (slen(substr))
+		write(1, substr, slen(substr));
 	free(substr);
 	if (tab)
 		free(tab);
@@ -55,7 +57,6 @@ void	echo_string(char **tab, t_command *command, int i)
 {
 	int	j;
 
-	ft_printf("command->options: %s\n", command->options);
 	while (tab[i])
 	{
 		j = 0;
@@ -64,6 +65,8 @@ void	echo_string(char **tab, t_command *command, int i)
 			if (tab[i][j] == '\"' || tab[i][j] == '\'')
 			{
 				tab = echo_double_quotes(command->options, tab, tab[i][j]);
+				// ft_printf("slen(tab[0]): %d\n", slen(tab[0]));
+				// ft_printf("tab[0]: _%s_\n", tab[0]);
 				i = -1;
 				j = 0;
 				break ;
@@ -91,7 +94,9 @@ void	cmd_echo(char **tab, t_env *env, t_command *command)
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
 	echo_string(tab, command, i);
-	if (i == 2)
+	ft_printf("_________\n");
+	if (i != 2)
 		write(1, "\n", 1);
+	ft_printf("_________\n");
 	env->value = 0;
 }

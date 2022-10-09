@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 23:38:33 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/09 03:15:48 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	init(t_command *command, int first)
 {
-	ft_printf("\n");
 	if (command->options && (!first))
 		free(command->options);
 	if (command->file_out && (!first))

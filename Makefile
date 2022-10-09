@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/10/07 23:46:11 by gmillon          ###   ########.fr        #
+#    Updated: 2022/10/09 03:11:36 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,10 @@ LIBFTINCLUDES = $(LIBFTDIR)/headers
 
 ######## SOURCE FILES ##########################################################
 
-SRC_FILES =		main		functions 	paths  export_unset  cmd atoi  var\
+SRC_FILES =		main		functions 	paths  export	unset  cmd atoi  var\
 				init		case_parse	do_command	data_utils	double_chevron\
 				input_traversal	case_parse_2 var_substitution cmd_echo utils\
-				utils2 utils3 relative_paths
+				utils2 utils3 relative_paths signals
 
 
 SRC = $(addsuffix .c, $(SRC_FILES))

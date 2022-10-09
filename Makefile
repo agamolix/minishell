@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/10/09 03:11:36 by gmillon          ###   ########.fr        #
+#    Updated: 2022/10/09 05:03:54 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ asan: $(OBJ) $(LIBFTDIR)/libft.a
 
 %.o: %.c
 	# $(CC) $(CFLAGS) -c $< -o $@
-	$(CC) -ggdb3 -c -I$(LIBFTINCLUDES) $< -o $@ -lreadline -L .brew/opt/readline/lib -I .brew/opt/readline/include 
+	$(CC) -ggdb3 -c -I$(LIBFTINCLUDES) $< -o $@ 
 
 $(LIBFTDIR)/libft.a:
 	git submodule update --remote

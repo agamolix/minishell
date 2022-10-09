@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/07 22:34:14 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 01:17:55gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*cas_chevron_in(char *input, t_command *command, t_env *env)
 {
 	int	i;
 
-	input = forward_space(input++);
+	input = forward_space(input + 1);
 	i = 0;
 	while (input[i] && maybe_char(input[i]))
 		i++;
@@ -43,12 +43,11 @@ char	*cas_chevron_out(char *input, t_command *command, t_env *env)
 {
 	int	i;
 
-	input = forward_space(input++);
+	input = forward_space(input + 1);
 	i = 0;
 	while (input[i] && maybe_char(input[i]))
 		i++;
 	command->file_out = str_n_dup(input, i);
-	ft_printf("command->file_out: %s\n", command->file_out);
 	command->fd_file_out = \
 		open(command->file_out, O_CREAT | O_WRONLY | O_TRUNC, 0640);
 	if (command->fd_file_out == -1)

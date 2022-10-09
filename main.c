@@ -6,11 +6,13 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 04:44:57 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 01:50:40 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_env g_env = {0, 0, 0, 0, 0};
 
 char	**copy_env(char **envp)
 {
@@ -98,15 +100,6 @@ int	execute(t_env *env, t_command *command)
 }
 
 // ^D displays on ctrl-D -> needs to be fixed
-void	handle_ctrl_c(int sig)
-{
-	(void) sig;
-
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
 
 char	*check_special_chars(char *input, t_command *command, t_env *env)
 {
@@ -143,7 +136,7 @@ int	parse_input(char *input, t_vars vars, int *pid, char *free_ptr)
 		{
 			input = cas_pipe(input, vars.command);
 			if (vars.command->options && vars.command->options[0]!= ' ' && vars.env->stop == 0)
-				*pid = execute(vars.env, vars.command);
+				g_env.pid = execute(vars.env, vars.command);
 			else
 			{
 				printf("Error pipe: stop pipe\n");
@@ -195,6 +188,12 @@ int parse_loop(int argc, char **argv, t_env *env, t_command *command)
 	while (1)
 	{
 		pid = wait(&status);
+		if (env->received_sig)
+		{
+			env->received_sig = 0;
+			usleep(1000);
+			break;
+		}
 		if (pid == lastpid)
 			env->value = WEXITSTATUS(status);
 		if (pid < 0)
@@ -202,8 +201,9 @@ int parse_loop(int argc, char **argv, t_env *env, t_command *command)
 	}
 	init(command, 0);
 	env->stop = 0;
+	env->pid = 0;
 	parse_loop(argc, argv, env, command);	
-	return 0;
+	return (0);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -212,12 +212,12 @@ int main(int argc, char **argv, char **envp)
 	t_command			mycommand;
 
 	signal(SIGINT, handle_ctrl_c);
-	signal(SIGQUIT, test);
+	signal(SIGQUIT, handle_ctrl_d);
 	init(&mycommand, 1);
-	myenv.value = 0;
-	myenv.stop = 0;
-	myenv.env = copy_env(envp);
+	// myenv.value = 0;
+	// myenv.stop = 0;
+	g_env.env = copy_env(envp);
 
-	parse_loop(argc, argv, &myenv, &mycommand);
+	parse_loop(argc, argv, &g_env, &mycommand);
 	return (0);
 }

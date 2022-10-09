@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 02:54:24 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 01:19:56 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	**add_var(t_env *env, char *var)
 		i++;
 	res = malloc(sizeof(char *) * (i + 2));
 	i = 0;
-	ft_printf("var: %s\n", var);
 	while (env->env[i])
 	{
 		res[i] = str_dup(env->env[i]);
@@ -71,5 +70,5 @@ int	cmd_export(t_env *env, char **tab)
 	else
 		env->env = add_var(env, tab[1]);
 	free(var);
-	return (env);
+	return (0);
 }

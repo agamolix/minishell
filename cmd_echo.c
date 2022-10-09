@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 21:01:02 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/09 03:42:41 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 00:18:10 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,7 @@ void	cmd_echo(char **tab, t_env *env, t_command *command)
 	if (tab[1] && str_n_cmp(tab[1], "-n", 3) == 0)
 		i = 2;
 	echo_string(tab, command, i);
-	ft_printf("_________\n");
 	if (i != 2)
 		write(1, "\n", 1);
-	ft_printf("_________\n");
 	env->value = 0;
 }

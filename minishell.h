@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 04:51:57 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 01:06:05 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <errno.h>
 # include "libft.h"
 
 typedef struct s_command
@@ -62,6 +63,9 @@ typedef struct s_env
 	char	**env;
 	int		value;
 	int		stop;
+	pid_t	pid;
+	int		received_sig;
+	
 }			t_env;
 
 typedef struct parse_vars
@@ -80,7 +84,9 @@ typedef struct s_vars
 	t_command	*command;
 }				t_vars;
 
+extern t_env g_env;
 //-----functions-----
+extern void		rl_replace_line (const char *, int);
 int				slen(char *str);
 char			*line(char	*str, char c);
 char			*forward(char	*str, char c);
@@ -100,7 +106,8 @@ void			put_nbr_fd(int n, int fd);
 int				do_command(char	**tab, t_env *env, t_command *command);
 
 // SIGNALS
-void			test(int sig);
+void			handle_ctrl_d(int sig);
+void			handle_ctrl_c(int sig);
 
 //--			--paths-----
 

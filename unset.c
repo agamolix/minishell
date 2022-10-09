@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 02:57:45 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 01:23:36 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ char	**remove_var(t_env *env, char *var)
 
 int	cmd_unset(t_env *env, char **tab)
 {
+	int	i;
+
+	i = 1;
 	if (str_chr(tab[1], '='))
 	{
 		printf("Error unset: identifier not valid\n");
@@ -87,6 +90,10 @@ int	cmd_unset(t_env *env, char **tab)
 		env->stop = 1;
 		return (env->value);
 	}
-	env->env = remove_var(env, tab[1]);
+	while (tab[i])	
+	{
+		env->env = remove_var(env, tab[i]);
+		i++;
+	}
 	return (0);
 }

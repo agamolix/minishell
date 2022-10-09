@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 04:04:47 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 00:34:55 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	do_command(char **tab, t_env *env, t_command *command)
 			exit(127);
 		execve(path, tab, NULL);
 	}
+	else
+		g_env.pid = pid;
 	close_fds(command);
 	return (pid);
 }

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/10 01:50:40 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 02:17:24 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,6 @@ int parse_loop(int argc, char **argv, t_env *env, t_command *command)
 		if (env->received_sig)
 		{
 			env->received_sig = 0;
-			usleep(1000);
 			break;
 		}
 		if (pid == lastpid)

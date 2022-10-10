@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 21:01:02 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 00:18:10 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 04:09:42 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ void	echo_string(char **tab, t_command *command, int i)
 			if (tab[i][j] == '\"' || tab[i][j] == '\'')
 			{
 				tab = echo_double_quotes(command->options, tab, tab[i][j]);
-				// ft_printf("slen(tab[0]): %d\n", slen(tab[0]));
-				// ft_printf("tab[0]: _%s_\n", tab[0]);
 				i = -1;
 				j = 0;
 				break ;
@@ -86,6 +84,7 @@ void	cmd_echo(char **tab, t_env *env, t_command *command)
 	int	j;
 
 	i = 1;
+	ft_printf("command->options: %s\n", command->options);
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
 	{
 		put_nbr_fd(env->value, 1);

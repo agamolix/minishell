@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/10 01:06:05 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 04:59:15 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+#include <dirent.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -83,6 +84,14 @@ typedef struct s_vars
 	t_env		*env;
 	t_command	*command;
 }				t_vars;
+
+typedef struct s_wildcard
+{
+	int			leading;
+	int			trailing;
+	char		**split_str;
+}				t_wildcard;
+
 
 extern t_env g_env;
 //-----functions-----
@@ -164,5 +173,12 @@ char			*replace_variable(char	*temp, t_env *env);
 char			*cas_double_quote(char	*input, t_command *command, t_env *env);
 char			*cas_single_quote(char	*input, t_command *command, t_env *env);
 char			*cas_char(char	*input, t_command *command, t_env *env);
+
+//WILDCARD
+int				num_pwd_files(void);
+char			*match_files(char **files, t_wildcard vars);
+char			*filenames_by_index(char **matched_files, char **files);
+char			*replace_wildcards(char *str);
+char			**get_pwd_files(void);
 
 #endif

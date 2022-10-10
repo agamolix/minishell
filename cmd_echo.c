@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 21:01:02 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 04:09:42 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 05:11:32 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	cmd_echo(char **tab, t_env *env, t_command *command)
 	int	j;
 
 	i = 1;
-	ft_printf("command->options: %s\n", command->options);
+	// ft_printf("command->options: %s\n", command->options);
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
 	{
 		put_nbr_fd(env->value, 1);

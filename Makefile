@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/10/11 00:10:51 by gmillon          ###   ########.fr        #
+#    Updated: 2022/10/11 00:13:03 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,8 +44,7 @@ LDFLAGS =
 all: $(NAME)
 
 $(NAME): $(LIBFTDIR)/libft.a $(OBJ)
-	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
-	$(CC) -ggdb3 $(OBJ) -o $(NAME) -lreadline -lncurses libreadline.a $(LIBFTDIR)/libft.a
+	$(CC) $(CFLAGS) -ggdb3 $(OBJ) -o $(NAME) -lreadline -lncurses libreadline.a $(LIBFTDIR)/libft.a
 
 asan: $(OBJ) $(LIBFTDIR)/libft.a
 	# $(CC) $(CFLAGS) $(OBJ) -o $(NAME) 

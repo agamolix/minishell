@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/10 04:59:15 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 23:56:50 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-#include <dirent.h>
+# include <dirent.h>
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -66,7 +66,6 @@ typedef struct s_env
 	int		stop;
 	pid_t	pid;
 	int		received_sig;
-	
 }			t_env;
 
 typedef struct parse_vars
@@ -92,10 +91,9 @@ typedef struct s_wildcard
 	char		**split_str;
 }				t_wildcard;
 
-
-extern t_env g_env;
+extern t_env	g_env;
 //-----functions-----
-extern void		rl_replace_line (const char *, int);
+extern void		rl_replace_line(const char *s, int x);
 int				slen(char *str);
 char			*line(char	*str, char c);
 char			*forward(char	*str, char c);
@@ -132,6 +130,8 @@ char			*find_path(t_env *env, char	*cmd);
 char			*find_free_var(t_env *env, char	*var);
 
 //--			--cmd-----
+
+int				execute(t_env *env, t_command *command);
 void			cmd_exit(char	**tab, t_env *env);
 int				cmd_cd(char	**tab, t_env *env);
 void			cmd_env(t_env *env, char	**tab);
@@ -157,8 +157,17 @@ int				init_cmd(t_command *command);
 
 // Data Utils
 void			free_split(char	**arr);
+void			await_child_loop(t_env *env, pid_t lastpid);
+t_vars			make_var_struct(int argc, char **argv, \
+								t_env *env, t_command *command);
 
 //-----case_parse-----
+void			handle_pipe_flag_in(t_command *command, t_env *env);
+int				handle_pipes(t_command *command, t_env *env);
+t_command		*parse_input(char *input, t_vars vars, char *free_ptr);
+
+char			*check_special_chars(char *input, t_command *command, \
+									t_env *env);
 int				parse_loop(int argc, char **argv, t_env *env, \
 							t_command *command);
 char			*forward_space(char	*input);
@@ -167,6 +176,7 @@ char			*cas_heredoc(char	*input, t_command *command, t_env *env);
 char			*cas_append(char	*input, t_command *command, t_env *env);
 char			*cas_chevron_in(char	*input, t_command *command, t_env *env);
 char			*cas_chevron_out(char	*input, t_command *command, t_env *env);
+void			pipe_var_set(t_command *command);
 char			*cas_pipe(char	*input, t_command *command);
 char			*insert_variable(char *str, int index1, int index2, char *val);
 char			*replace_variable(char	*temp, t_env *env);
@@ -177,8 +187,10 @@ char			*cas_char(char	*input, t_command *command, t_env *env);
 //WILDCARD
 int				num_pwd_files(void);
 char			*match_files(char **files, t_wildcard vars);
-char			*filenames_by_index(char **matched_files, char **files);
+char			*filenames_by_index(char **filtered_files, char **files);
 char			*replace_wildcards(char *str);
+char			*edge_cases(char **filtered_files, \
+							t_wildcard vars, int i, int j);
 char			**get_pwd_files(void);
 
 #endif

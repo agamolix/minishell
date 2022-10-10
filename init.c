@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 19:35:18 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/09 03:15:48 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 23:46:48 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	init(t_command *command, int first)
 		free(command->options);
 	if (command->file_out && (!first))
 		free(command->file_out);
-	// if (command->file_in && (!first))
-	// 	free(command->file_in);
 	command->options = 0;
 	command->fd_file_in = 0;
 	command->file_in = 0;
@@ -41,8 +39,6 @@ int	init_cmd(t_command *command)
 		free(command->options);
 	if (command->file_out)
 		free(command->file_out);
-	// if (command->file_in)
-	// 	free(command->file_in);
 	command->options = 0;
 	command->fd_file_in = 0;
 	command->file_in = 0;

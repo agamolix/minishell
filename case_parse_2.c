@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 20:54:09 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 04:33:25 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 23:45:49 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*cas_pipe(char *input, t_command *command)
 	command->pipe_flag_out = 1;
 	return (input);
 }
-
 
 char	*cas_char(char *input, t_command *command, t_env *env)
 {
@@ -43,4 +42,66 @@ char	*cas_char(char *input, t_command *command, t_env *env)
 	if (slen(input) == 0)
 		return (0);
 	return (input);
+}
+
+t_command	*parse_input(char *input, t_vars vars, char *free_ptr)
+{
+	while (input)
+	{
+		input = forward_space(input);
+		input = check_special_chars(input, vars.command, vars.env);
+		if (input && input[0] == '|')
+		{
+			input = cas_pipe(input, vars.command);
+			if (vars.command->options \
+					&& vars.command->options[0] != ' ' && vars.env->stop == 0)
+				g_env.pid = execute(vars.env, vars.command);
+			else
+			{
+				printf("Error pipe: stop pipe\n");
+				init(vars.command, 0);
+				free(free_ptr);
+				parse_loop(vars.argc, vars.argv, vars.env, vars.command);
+			}
+			pipe_var_set(vars.command);
+		}		
+		else if (input)
+			input = cas_char(input, vars.command, vars.env);
+	}
+	return (vars.command);
+}
+
+t_command	*make_command(t_vars vars)
+{
+	char	*input;
+	char	*free_ptr;
+
+	input = readline("$> ");
+	free_ptr = input;
+	if (!input)
+		exit(0);
+	add_history(input);
+	vars.command = parse_input(input, vars, free_ptr);
+	free(free_ptr);
+	return (vars.command);
+}
+
+int	parse_loop(int argc, char **argv, t_env *env, t_command *command)
+{
+	char	*input;
+	pid_t	lastpid;
+	pid_t	pid;
+	int		status;
+	char	*free_ptr;
+
+	command = make_command(make_var_struct(argc, argv, env, command));
+	if (env->stop == 0)
+		if (command->options && command->options[0] != ' ')
+			lastpid = execute(env, command);
+	await_child_loop(env, lastpid);
+	init(command, 0);
+	env->stop = 0;
+	env->pid = 0;
+	parse_loop(argc, argv, env, command);
+	return (0);
 }

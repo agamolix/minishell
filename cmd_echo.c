@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 21:01:02 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 05:11:32 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/10 22:46:01 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	**echo_double_quotes(char *arg, char **tab, char target_char)
 	start = ft_strchr_index(subset, target_char) + 1;
 	len = ft_strchr_index(subset + start, target_char);
 	substr = ft_substr(subset, start, len);
-	// ft_printf("slen(substr): %d\n", slen(substr));
 	if (slen(substr))
 		write(1, substr, slen(substr));
 	free(substr);
@@ -69,7 +68,8 @@ void	echo_string(char **tab, t_command *command, int i)
 				j = 0;
 				break ;
 			}
-			write(1, &tab[i][j], 1);
+			if (tab && tab[i] && tab[i][j])
+				write(1, &tab[i][j], 1);
 			j++;
 		}
 		if (tab[i + 1] && i != -1)
@@ -84,7 +84,6 @@ void	cmd_echo(char **tab, t_env *env, t_command *command)
 	int	j;
 
 	i = 1;
-	// ft_printf("command->options: %s\n", command->options);
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)
 	{
 		put_nbr_fd(env->value, 1);

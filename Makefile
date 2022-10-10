@@ -6,7 +6,7 @@
 #    By: gmillon <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/16 17:07:37 by atrilles          #+#    #+#              #
-#    Updated: 2022/10/11 00:13:03 by gmillon          ###   ########.fr        #
+#    Updated: 2022/10/11 00:13:58 by gmillon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ test:
 
 %.o: %.c
 	# $(CC) $(CFLAGS) -c $< -o $@
-	$(CC) -ggdb3 -c -I$(LIBFTINCLUDES) $< -o $@ 
+	$(CC) $(CFLAGS) -ggdb3 -c -I$(LIBFTINCLUDES) $< -o $@ 
 
 $(LIBFTDIR)/libft.a:
 	git submodule update --remote

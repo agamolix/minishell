@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 21:01:02 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 22:46:01 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:20:13 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	**double_quotes_newtab(char *subset)
 {
 	char	**split;
-	char	**result;
 
 	split = ft_split(subset, ' ');
 	if (subset && *subset != ' ')
@@ -81,7 +80,6 @@ void	echo_string(char **tab, t_command *command, int i)
 void	cmd_echo(char **tab, t_env *env, t_command *command)
 {
 	int	i;
-	int	j;
 
 	i = 1;
 	if (tab[1] && str_n_cmp(tab[1], "$?", 3) == 0)

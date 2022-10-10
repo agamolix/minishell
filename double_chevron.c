@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 20:41:26 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/07 22:04:09 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:17:12 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*update_heredoc(int heredoc, char *heredoc_input)
 	return (heredoc_input);
 }
 
-char	*cas_heredoc(char *input, t_command *command, t_env *env)
+char	*cas_heredoc(char *input, t_command *command)
 {
 	const int	heredoc = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0640);
 	char		*heredoc_input;
@@ -78,12 +78,3 @@ char	*cas_append(char *input, t_command *command, t_env *env)
 		return (0);
 	return (input);
 }
-
-// int main(void)
-// {
-// 	t_command *t;
-// 	t_env		*e;
-// 	init(t, 1);
-// 	cas_heredoc("<< x", t, e);
-// 	return (0);
-// }

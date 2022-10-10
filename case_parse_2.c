@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 20:54:09 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 23:45:49 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:22:24 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,9 @@ t_command	*make_command(t_vars vars)
 
 int	parse_loop(int argc, char **argv, t_env *env, t_command *command)
 {
-	char	*input;
 	pid_t	lastpid;
-	pid_t	pid;
-	int		status;
-	char	*free_ptr;
 
+	lastpid = -100;
 	command = make_command(make_var_struct(argc, argv, env, command));
 	if (env->stop == 0)
 		if (command->options && command->options[0] != ' ')
@@ -102,6 +99,7 @@ int	parse_loop(int argc, char **argv, t_env *env, t_command *command)
 	init(command, 0);
 	env->stop = 0;
 	env->pid = 0;
-	parse_loop(argc, argv, env, command);
+	if (!env->stop)
+		parse_loop(argc, argv, env, command);
 	return (0);
 }

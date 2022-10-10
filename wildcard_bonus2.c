@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 04:28:50 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 04:33:06 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:21:36 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	num_pwd_files(void)
 	struct dirent	*file;
 	int				count;
 
+	count = 0;
 	getcwd(buf, 1000);
 	current_dir = opendir(buf);
 	if (current_dir)

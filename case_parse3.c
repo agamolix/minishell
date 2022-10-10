@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 23:51:36 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 23:52:28 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:17:22 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*check_special_chars(char *input, t_command *command, t_env *env)
 	if (!str_n_cmp(input, ">>", 2))
 		return (cas_append(input, command, env));
 	else if (!str_n_cmp(input, "<<", 2))
-		return (cas_heredoc(input, command, env));
+		return (cas_heredoc(input, command));
 	else if (input[0] == '<')
 		return (cas_chevron_in(input, command, env));
 	else if (input[0] == '>')

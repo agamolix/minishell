@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/10 23:54:26 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:15:02 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	execute(t_env *env, t_command *command)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env				myenv;
 	t_command			mycommand;
 
 	signal(SIGINT, handle_ctrl_c);

@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 17:40:41 by atrilles          #+#    #+#             */
-/*   Updated: 2022/10/10 00:34:55 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:15:12 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	handle_fork_err(int pid, t_env *env)
 int	do_command(char **tab, t_env *env, t_command *command)
 {
 	pid_t	pid;
-	int		status;
 	char	*path;
 
 	pid = fork();

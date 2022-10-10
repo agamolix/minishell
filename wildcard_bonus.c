@@ -6,7 +6,7 @@
 /*   By: gmillon <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 04:28:50 by gmillon           #+#    #+#             */
-/*   Updated: 2022/10/10 22:59:04 by gmillon          ###   ########.fr       */
+/*   Updated: 2022/10/11 00:21:06 by gmillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static char	*join_and_cleanup(char **args, char **files, char *str)
 	char	*result;
 	char	*final;
 
+	(void)files;
 	result = ft_join_arr_by_str(args, " ");
 	final = ft_strdup(result + 1);
 	free(result);
